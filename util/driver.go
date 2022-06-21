@@ -56,7 +56,7 @@ func newPostgreSQL(config *config.AppConfig) *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&migrate.User{})
+	db.AutoMigrate(&migrate.User{}, &migrate.Membership{}, &migrate.Payment{})
 
 	return db
 }
