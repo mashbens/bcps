@@ -1,0 +1,18 @@
+[app]
+port = ""
+jwtkey = ""
+
+
+[database]
+driver = ""
+db_host = ""
+db_user = ""
+db_pass = ""
+db_name = ""
+db_port = ""
+
+[mailjet]
+email = ""
+publicKey = ""
+privatekey = ""
+
