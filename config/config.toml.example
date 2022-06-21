@@ -16,3 +16,7 @@ email = ""
 publicKey = ""
 privatekey = ""
 
+
+[midtrans]
+clientKey = ""
+ServerKey = ""
