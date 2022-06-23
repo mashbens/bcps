@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/mashbens/cps/config"
-	migrate "github.com/mashbens/cps/repository/migrate"
+	migrate "github.com/mashbens/cps/migrate"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
