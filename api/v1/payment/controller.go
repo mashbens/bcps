@@ -2,7 +2,6 @@ package payment
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -58,13 +57,38 @@ func (controller *PaymentController) CreatePayment(c echo.Context) error {
 
 	createPaymenReq.UserID = intID
 
-	log.Println(createPaymenReq.UserID)
-	user, err := controller.paymentService.CreatePayment(request.NewCreatePaymentReq(createPaymenReq))
+	payment, err := controller.paymentService.CreatePayment(request.NewCreatePaymentReq(createPaymenReq))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusInternalServerError, response)
 	}
-	data := resp.FromService(*user)
+	data := resp.FromService(*payment)
 	response := _response.BuildSuccsessResponse("Payment Created", true, data)
+	return c.JSON(http.StatusOK, response)
+}
+
+func (controller *PaymentController) GetPaymentDetail(c echo.Context) error {
+	header := c.Request().Header.Get("Authorization")
+	token := controller.jwtService.ValidateToken(header, c)
+	if header == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+	if token == nil {
+		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	id := fmt.Sprintf("%v", claims["user_id"])
+
+	payment, err := controller.paymentService.FindPaymentDetails(id)
+	if err != nil {
+		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+
+	data := resp.FromService(*payment)
+
+	response := _response.BuildSuccsessResponse("Payment found", true, data)
 	return c.JSON(http.StatusOK, response)
 }
