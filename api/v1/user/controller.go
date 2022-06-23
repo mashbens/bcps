@@ -92,15 +92,3 @@ func (controller *UserController) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, response)
 
 }
-
-func (controller *UserController) getUserIDByHeader(c echo.Context) string {
-	header := c.Request().Header.Get("Authorization")
-
-	if header == "" {
-		return fmt.Sprint("Error", "Failed to validate token")
-	}
-	token := controller.jwtService.ValidateToken(header, c)
-	claims := token.Claims.(jwt.MapClaims)
-	id := fmt.Sprintf("%v", claims["user_id"])
-	return id
-}

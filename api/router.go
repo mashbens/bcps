@@ -2,18 +2,16 @@ package api
 
 import (
 	"github.com/mashbens/cps/api/v1/auth"
+	"github.com/mashbens/cps/api/v1/payment"
 	"github.com/mashbens/cps/api/v1/user"
-
-	service "github.com/mashbens/cps/business/user"
 
 	"github.com/labstack/echo/v4"
 )
 
-var jwtService service.JWTService = service.NewJWTService()
-
 type Controller struct {
 	UserAuth *auth.AuthController
 	User     *user.UserController
+	Payment  *payment.PaymentController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -27,4 +25,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	userRoutes := e.Group("/api/v1/user")
 	userRoutes.GET("/profile", controller.User.Profile)
 	userRoutes.PUT("/profile", controller.User.Update)
+
+	paymentRoutes := e.Group("/api/v1/member")
+	paymentRoutes.POST("/register", controller.Payment.CreatePayment)
 }
