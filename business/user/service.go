@@ -12,7 +12,7 @@ type UserRepository interface {
 	ResetPassword(user entity.User) (entity.User, error)
 	FindByEmail(email string) (entity.User, error)
 	FindByUserID(userID string) (entity.User, error)
-	// 	UpdateUserExpiry(userID string, expiry string, memberType string) (entity.User, error)
+	UpdateUserExpiry(userID string, expiry string, memberType string) error
 }
 
 type UserService interface {
@@ -21,7 +21,7 @@ type UserService interface {
 	ResetPassword(user entity.User) (*entity.User, error)
 	FindUserByEmail(email string) (*entity.User, error)
 	FindUserByID(userID string) (*entity.User, error)
-	// UpdateUserExpiry(userID string, expiry string, memberType string) (entity.User, error)
+	UpdateUserExpiry(userID string, expiry string, memberType string) error
 }
 
 type userService struct {
@@ -74,7 +74,6 @@ func (c *userService) FindUserByID(userID string) (*entity.User, error) {
 		return nil, err
 	}
 	return &user, nil
-
 }
 
 func (c *userService) UpdateUser(user entity.User) (*entity.User, error) {
@@ -84,5 +83,10 @@ func (c *userService) UpdateUser(user entity.User) (*entity.User, error) {
 		return nil, err
 	}
 	return &u, nil
+}
 
+func (c *userService) UpdateUserExpiry(userID string, expiry string, memberType string) error {
+
+	user := c.userRepo.UpdateUserExpiry(userID, expiry, memberType)
+	return user
 }
