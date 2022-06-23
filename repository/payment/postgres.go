@@ -24,3 +24,12 @@ func (c *PaymentPostgresRepo) InsertPayment(payment entity.Payment) (entity.Paym
 	}
 	return record.toService(), nil
 }
+
+func (c *PaymentPostgresRepo) GetPaymentDetails(userID string) (entity.Payment, error) {
+	var record Payment
+	res := c.db.Where("user_id = ?", userID).Take(&record)
+	if res.Error != nil {
+		return record.toService(), res.Error
+	}
+	return record.toService(), nil
+}
