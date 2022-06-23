@@ -84,3 +84,12 @@ func (r *PostgresRepository) UpdateUser(user entity.User) (entity.User, error) {
 	r.db.Save(&record)
 	return record.toService(), nil
 }
+
+func (r *PostgresRepository) UpdateUserExpiry(userID string, expiry string, memberType string) error {
+	var record User
+	res := r.db.Model(&record).Where("id = ?", userID).Updates(map[string]interface{}{"member_expired": expiry, "member_type": memberType})
+	if res != nil {
+		return nil
+	}
+	return nil
+}

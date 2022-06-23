@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/mashbens/cps/business/user/entity"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -12,6 +13,7 @@ type User struct {
 	Password       string `gorm:"type:varchar(100)" json:"-"`
 	Member_expired string `gorm:"type:varchar(100)" json:"-"`
 	Member_type    string `gorm:"type:varchar(100)" json:"-"`
+	*gorm.Model
 }
 
 func (u *User) toService() entity.User {
