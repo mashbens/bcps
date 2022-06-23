@@ -28,4 +28,5 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 
 	paymentRoutes := e.Group("/api/v1/member")
 	paymentRoutes.POST("/register", controller.Payment.CreatePayment)
+	paymentRoutes.GET("/details", controller.Payment.GetPaymentDetail)
 }
