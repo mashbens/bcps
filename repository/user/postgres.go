@@ -5,6 +5,7 @@ import (
 
 	"github.com/mashbens/cps/business/user"
 	"github.com/mashbens/cps/business/user/entity"
+
 	"golang.org/x/crypto/bcrypt"
 
 	"gorm.io/gorm"
@@ -74,13 +75,47 @@ func hashAndSalt(pwd []byte) string {
 func (r *PostgresRepository) UpdateUser(user entity.User) (entity.User, error) {
 
 	record := fromService(user)
+
+	var tempRecord User
+	r.db.Find(&tempRecord, user.ID)
+
 	if record.Password != "" {
 		record.Password = hashAndSalt([]byte(user.Password))
 	} else {
-		var tempRecord User
 		r.db.Find(&tempRecord, user.ID)
 		record.Password = tempRecord.Password
 	}
+
+	if record.Email != "" {
+		record.Email = user.Email
+	} else {
+		record.Email = tempRecord.Email
+	}
+
+	if record.Phone != "" {
+		record.Phone = user.Phone
+	} else {
+		record.Phone = tempRecord.Phone
+	}
+
+	if record.Name != "" {
+		record.Name = user.Name
+	} else {
+		record.Name = tempRecord.Name
+	}
+
+	if record.Member_expired != "" {
+		record.Member_expired = user.Member_expired
+	} else {
+		record.Member_expired = tempRecord.Member_expired
+	}
+
+	if record.Member_type != "" {
+		record.Member_type = user.Member_type
+	} else {
+		record.Member_type = tempRecord.Member_type
+	}
+
 	r.db.Save(&record)
 	return record.toService(), nil
 }

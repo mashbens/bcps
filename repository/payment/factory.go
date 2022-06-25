@@ -10,6 +10,8 @@ func PaymentRepositoryFactory(dbCon *util.DatabaseConnection) payment.PaymentRep
 
 	if dbCon.Driver == util.PostgreSQL {
 		paymentRepository = NewPaymentPostgresRepo(dbCon.PostgreSQL)
+		dbCon.PostgreSQL.AutoMigrate(&Payment{})
+
 	} else {
 		panic("Database driver not supported")
 	}

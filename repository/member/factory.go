@@ -10,8 +10,11 @@ func MemberRepoFactory(dbCon *util.DatabaseConnection) member.MemberRepo {
 
 	if dbCon.Driver == util.PostgreSQL {
 		memberRepository = NewMemberPostgresRepository(dbCon.PostgreSQL)
+		dbCon.PostgreSQL.AutoMigrate(&Membership{})
+
 	} else {
 		panic("Database driver not supported")
 	}
+
 	return memberRepository
 }

@@ -4,6 +4,7 @@ import (
 	member "github.com/mashbens/cps/business/member/entity"
 	"github.com/mashbens/cps/business/payment/entity"
 	user "github.com/mashbens/cps/business/user/entity"
+	// ----
 )
 
 type Payment struct {

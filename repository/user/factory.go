@@ -10,6 +10,8 @@ func RepositoryFactory(dbCon *util.DatabaseConnection) user.UserRepository {
 
 	if dbCon.Driver == util.PostgreSQL {
 		userRepository = NewPostgresRepository(dbCon.PostgreSQL)
+		dbCon.PostgreSQL.AutoMigrate(&User{})
+
 	} else {
 		panic("Database driver not supported")
 	}

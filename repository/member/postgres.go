@@ -24,3 +24,13 @@ func (c *MemberPostgresRepository) FindMemberByID(memberID string) (entity.Membe
 	}
 	return record.toService(), nil
 }
+
+func (c *MemberPostgresRepository) InserMemberships(member entity.Membership) (entity.Membership, error) {
+	record := fromService(member)
+	res := c.db.Create(&record)
+	if res.Error != nil {
+		return record.toService(), res.Error
+	}
+	return record.toService(), nil
+
+}
