@@ -2,16 +2,20 @@ package api
 
 import (
 	"github.com/mashbens/cps/api/v1/auth"
+	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
+	"github.com/mashbens/cps/api/v1/superadmin"
 	"github.com/mashbens/cps/api/v1/user"
 
 	"github.com/labstack/echo/v4"
 )
 
 type Controller struct {
-	UserAuth *auth.AuthController
-	User     *user.UserController
-	Payment  *payment.PaymentController
+	UserAuth   *auth.AuthController
+	User       *user.UserController
+	Payment    *payment.PaymentController
+	SuperAdmin *superadmin.SuperAdminController
+	Member     *member.MemberController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -29,4 +33,11 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	paymentRoutes := e.Group("/api/v1/member")
 	paymentRoutes.POST("/register", controller.Payment.CreatePayment)
 	paymentRoutes.GET("/details", controller.Payment.GetPaymentDetail)
+
+	superAdminRoutes := e.Group("/api/v1/super-admin")
+	superAdminRoutes.POST("/register", controller.SuperAdmin.RegisterSuperAdmin)
+	superAdminRoutes.POST("/login", controller.SuperAdmin.LoginSuperAdmin)
+
+	memberRoutes := e.Group("/api/v1/member")
+	memberRoutes.POST("/create-member", controller.Member.CreateMember)
 }
