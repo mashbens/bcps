@@ -11,6 +11,8 @@ import (
 	"github.com/mashbens/cps/api"
 	"github.com/mashbens/cps/app/modules"
 	"github.com/mashbens/cps/config"
+
+	// "github.com/mashbens/cps/migrate"
 	"github.com/mashbens/cps/util"
 
 	"github.com/labstack/echo/v4"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/mashbens/cps/config"
-	migrate "github.com/mashbens/cps/migrate"
+	// "github.com/mashbens/cps/migrate"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -37,14 +37,13 @@ func NewConnectionDatabase(config *config.AppConfig) *DatabaseConnection {
 		db.MySQL = newMySQL(config)
 	case "PostgreSQL":
 		db.Driver = PostgreSQL
-		db.PostgreSQL = newPostgreSQL(config)
+		db.PostgreSQL = NewPostgreSQL(config)
 	default:
 		panic("Database driver not supported")
 	}
 	return &db
 }
-
-func newPostgreSQL(config *config.AppConfig) *gorm.DB {
+func NewPostgreSQL(config *config.AppConfig) *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		config.Database.DB_Host,
 		config.Database.DB_User,
@@ -56,8 +55,10 @@ func newPostgreSQL(config *config.AppConfig) *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-	db.AutoMigrate(&migrate.User{}, &migrate.Membership{}, &migrate.Payment{})
 
+	// db.AutoMigrate(&migrate.User{}, &migrate.Membership{}, &migrate.Payment{}, &migrate.SuperAdmin{})
+
+	// migrate.NewMigrate(db)
 	return db
 }
 func newMySQL(config *config.AppConfig) *gorm.DB {
