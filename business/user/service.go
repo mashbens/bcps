@@ -77,12 +77,14 @@ func (c *userService) FindUserByID(userID string) (*entity.User, error) {
 }
 
 func (c *userService) UpdateUser(user entity.User) (*entity.User, error) {
-
-	u, err := c.userRepo.UpdateUser(user)
+	user, err := c.userRepo.UpdateUser(user)
 	if err != nil {
 		return nil, err
 	}
-	return &u, nil
+
+	// logic update changes to service
+
+	return &user, nil
 }
 
 func (c *userService) UpdateUserExpiry(userID string, expiry string, memberType string) error {
