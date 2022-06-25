@@ -2,25 +2,37 @@ package resp
 
 import (
 	payment "github.com/mashbens/cps/business/payment/entity"
-	// member "github.com/mashbens/cps/business/member/entity"
-	// user "github.com/mashbens/cps/business/user/entity"
-
-	member "github.com/mashbens/cps/api/v1/member/resp"
-	user "github.com/mashbens/cps/api/v1/user/resp"
+	// member "github.com/mashbens/cps/api/v1/member/resp"
+	// user "github.com/mashbens/cps/api/v1/user/resp"
 )
 
 type PaymentResp struct {
-	ID      int               `json:"id"`
-	User    user.UserResp     `json:"user"`
-	Member  member.MemberResp `json:"membership"`
-	Amount  int               `json:"amount"`
-	SnapURL string            `json:"snap_url,omitempty"`
+	ID      int    `json:"id"`
+	User    User   `json:"user"`
+	Member  Member `json:"membership"`
+	Amount  int    `json:"amount"`
+	SnapURL string `json:"snap_url,omitempty"`
+}
+
+type User struct {
+	ID             int    `json:"id"`
+	Name           string `json:"name"`
+	Email          string `json:"email"`
+	Phone          string `json:"phone"`
+	Member_expired string `json:"member_expired"`
+	Member_type    string `json:"member_type"`
+}
+type Member struct {
+	ID       int    `json:"id"`
+	Type     string `json:"type"`
+	Price    int    `json:"price"`
+	Duration int    `json:"duration"`
 }
 
 func FromService(payment payment.Payment) PaymentResp {
 	return PaymentResp{
 		ID: int(payment.ID),
-		User: user.UserResp{
+		User: User{
 			ID:             payment.User.ID,
 			Name:           payment.User.Name,
 			Email:          payment.User.Email,
@@ -28,7 +40,7 @@ func FromService(payment payment.Payment) PaymentResp {
 			Member_expired: payment.User.Member_expired,
 			Member_type:    payment.User.Member_type,
 		},
-		Member: member.MemberResp{
+		Member: Member{
 			ID:       payment.Membership.ID,
 			Type:     payment.Membership.Type,
 			Price:    payment.Membership.Price,
