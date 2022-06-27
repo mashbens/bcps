@@ -40,4 +40,5 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 
 	memberRoutes := e.Group("/api/v1/member")
 	memberRoutes.POST("/create-member", controller.Member.CreateMember)
+	memberRoutes.GET("/list", controller.Member.GetAllMemberType)
 }
