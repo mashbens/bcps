@@ -2,6 +2,7 @@ package modules
 
 import (
 	"github.com/mashbens/cps/api"
+	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
@@ -25,6 +26,9 @@ import (
 
 	superAdminService "github.com/mashbens/cps/business/superadmin"
 	superAdminRepo "github.com/mashbens/cps/repository/superadmin"
+
+	AdminService "github.com/mashbens/cps/business/admin"
+	AdminRepo "github.com/mashbens/cps/repository/admin"
 )
 
 func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) api.Controller {
@@ -36,6 +40,9 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 
 	superAdminRepo := superAdminRepo.SuperAdminRepositoryFactory(dbCon)
 	superAdminService := superAdminService.NewSuperAdminService(superAdminRepo, jwtService)
+
+	AdminRepo := AdminRepo.AdminRepositoryFactory(dbCon)
+	AdminService := AdminService.NewAdminService(AdminRepo, jwtService, superAdminService)
 
 	memberRepo := memberRepo.MemberRepoFactory(dbCon)
 	memberService := memberService.NewMemberService(memberRepo, superAdminService)
@@ -49,6 +56,7 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 		Payment:    payment.NewPaymentController(paymentService, jwtService),
 		SuperAdmin: superadmin.NewSuperAdminController(superAdminService),
 		Member:     member.NewMemberController(memberService, jwtService),
+		Admin:      admin.NewAdminController(AdminService, jwtService),
 	}
 	return controller
 }
