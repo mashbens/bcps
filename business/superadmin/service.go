@@ -79,7 +79,7 @@ func (c *superAdminSevice) FindSuperAdminByName(name string) (*entity.SuperAdmin
 
 	admin, err := c.superAdminRepo.FindSuperAdminByName(name)
 	if err != nil {
-		return nil, errors.New("Member not found")
+		return nil, errors.New("Super admin not found")
 	}
 
 	return &admin, nil
@@ -89,7 +89,7 @@ func (c *superAdminSevice) FindSuperAdminByID(id string) (*entity.SuperAdmin, er
 
 	admin, err := c.superAdminRepo.FindSuperAdminByID(id)
 	if err != nil {
-		return nil, errors.New("Member not found")
+		return nil, errors.New("Super admin not found")
 	}
 
 	return &admin, nil
