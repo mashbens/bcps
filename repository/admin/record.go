@@ -31,3 +31,10 @@ func fromService(a entity.Admin) Admin {
 		Phone:    a.Phone,
 	}
 }
+func toServiceList(data []Admin) []entity.Admin {
+	a := []entity.Admin{}
+	for key := range data {
+		a = append(a, data[key].toService())
+	}
+	return a
+}
