@@ -21,3 +21,11 @@ func FromServiceAdmin(admin entity.Admin) AdminResp {
 		Token: admin.Token,
 	}
 }
+func FromServiceSlice(data []entity.Admin) []AdminResp {
+	var adminAray []AdminResp
+	for key := range data {
+		adminAray = append(adminAray, FromServiceAdmin(data[key]))
+
+	}
+	return adminAray
+}

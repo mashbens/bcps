@@ -50,4 +50,8 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminRoutes := e.Group("/api/v1/admin")
 	adminRoutes.POST("/create-admin", controller.Admin.RegisteAdmin)
 	adminRoutes.POST("/login", controller.Admin.LoginAdmin)
+	adminRoutes.GET("/list", controller.Admin.FindAllAdmins)
+	adminRoutes.GET("/:id", controller.Admin.FindAdminByID)
+	adminRoutes.PUT("/:id", controller.Admin.UpdateAdmin)
+	adminRoutes.DELETE("/:id", controller.Admin.DeleteAdmin)
 }
