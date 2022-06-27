@@ -32,7 +32,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	userRoutes.GET("/profile", controller.User.Profile)
 	userRoutes.PUT("/profile", controller.User.Update)
 
-	paymentRoutes := e.Group("/api/v1/member")
+	paymentRoutes := e.Group("/api/v1/membership")
 	paymentRoutes.POST("/register", controller.Payment.CreatePayment)
 	paymentRoutes.GET("/details", controller.Payment.GetPaymentDetail)
 
@@ -40,7 +40,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	superAdminRoutes.POST("/register", controller.SuperAdmin.RegisterSuperAdmin)
 	superAdminRoutes.POST("/login", controller.SuperAdmin.LoginSuperAdmin)
 
-	memberRoutes := e.Group("/api/v1/member")
+	memberRoutes := e.Group("/api/v1/membership")
 	memberRoutes.POST("/create-member", controller.Member.CreateMember)
 	memberRoutes.GET("/list", controller.Member.GetAllMemberType)
 	memberRoutes.GET("/:id", controller.Member.FindMemberByID)
