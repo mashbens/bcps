@@ -34,11 +34,30 @@ func (c *MemberPostgresRepository) InserMemberships(member entity.Membership) (e
 	return record.toService(), nil
 }
 
-func (c *MemberPostgresRepository) FIndAllMemberType(title string) (data []entity.Membership) {
+func (c *MemberPostgresRepository) FindAllMemberType(title string) (data []entity.Membership) {
 	var record []Membership
 	res := c.db.Find(&record)
 	if res.Error != nil {
 		return []entity.Membership{}
 	}
 	return toServiceList(record)
+}
+
+func (c *MemberPostgresRepository) UpdateMemberType(member entity.Membership) (entity.Membership, error) {
+	record := fromService(member)
+	res := c.db.Model(&record).Updates(map[string]interface{}{"type": member.Type, "price": member.Price, "duration": member.Duration, "description": member.Description})
+	if res.Error != nil {
+		return record.toService(), res.Error
+	}
+
+	return record.toService(), nil
+}
+
+func (c *MemberPostgresRepository) DeleteMemberType(memberID string) error {
+	record := []Membership{}
+	res := c.db.Delete(&record, memberID)
+	if res.Error != nil {
+		return nil
+	}
+	return nil
 }

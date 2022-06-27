@@ -2,6 +2,7 @@ package member
 
 import (
 	"errors"
+	"log"
 	"strconv"
 
 	"github.com/mashbens/cps/business/member/entity"
@@ -11,13 +12,17 @@ import (
 type MemberRepo interface {
 	FindMemberByID(memberID string) (entity.Membership, error)
 	InserMemberships(member entity.Membership) (entity.Membership, error)
-	FIndAllMemberType(title string) (data []entity.Membership)
+	UpdateMemberType(member entity.Membership) (entity.Membership, error)
+	FindAllMemberType(title string) (data []entity.Membership)
+	DeleteMemberType(memberID string) error
 }
 
 type MemberService interface {
 	FindMemberTypeByID(memberID string) (*entity.Membership, error)
 	CreateMemberships(member entity.Membership) (*entity.Membership, error)
-	FIndAllMemberType(search string) (data []entity.Membership)
+	UpdateMemberType(member entity.Membership) (*entity.Membership, error)
+	FindAllMemberType(search string) (data []entity.Membership)
+	DeleteMemberType(adminID string, memberID string) error
 }
 
 type memberService struct {
@@ -35,8 +40,8 @@ func NewMemberService(
 	}
 }
 
-func (c *memberService) FIndAllMemberType(search string) (data []entity.Membership) {
-	data = c.memberRepo.FIndAllMemberType(search)
+func (c *memberService) FindAllMemberType(search string) (data []entity.Membership) {
+	data = c.memberRepo.FindAllMemberType(search)
 	return
 }
 
@@ -44,7 +49,7 @@ func (c *memberService) FindMemberTypeByID(memberID string) (*entity.Membership,
 
 	member, err := c.memberRepo.FindMemberByID(memberID)
 	if err != nil {
-		return nil, errors.New("Member type not found------")
+		return nil, errors.New("Member type not found")
 	}
 
 	return &member, nil
@@ -66,4 +71,43 @@ func (c *memberService) CreateMemberships(member entity.Membership) (*entity.Mem
 	}
 
 	return &m, nil
+}
+
+func (c *memberService) UpdateMemberType(member entity.Membership) (*entity.Membership, error) {
+
+	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(strconv.Itoa(member.Super_adminID))
+	if err != nil {
+		return nil, errors.New("Super admin not found")
+	}
+	_ = sAdmin
+
+	m, err := c.FindMemberTypeByID(strconv.Itoa(member.ID))
+	if err != nil {
+		return nil, err
+	}
+	_ = m
+
+	member, err = c.memberRepo.UpdateMemberType(member)
+	if err != nil {
+		return nil, err
+	}
+
+	return &member, nil
+}
+
+func (c *memberService) DeleteMemberType(adminID string, memberID string) error {
+	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(adminID)
+	if err != nil {
+		return nil
+	}
+	_ = sAdmin
+
+	m := c.memberRepo.DeleteMemberType(memberID)
+	if err != nil {
+		return nil
+	}
+	log.Println(memberID)
+	_ = m
+
+	return nil
 }
