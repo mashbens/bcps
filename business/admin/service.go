@@ -15,12 +15,20 @@ import (
 type AdminRepo interface {
 	InsertAdmin(admin entity.Admin) (entity.Admin, error)
 	FindAdminByEmail(email string) (entity.Admin, error)
+	FindAdminByID(id string) (entity.Admin, error)
+	FindAllAdmins(search string) (data []entity.Admin)
+	UpdateAdmin(admin entity.Admin) (entity.Admin, error)
+	DeleteAdmin(adminID string) error
 }
 
 type AdminService interface {
 	InsertAdmin(admin entity.Admin) (*entity.Admin, error)
 	FindAdminByEmail(email string) (*entity.Admin, error)
 	AdminLogin(admin entity.Admin) (*entity.Admin, error)
+	FindAdminByID(sAdminID string, adminID string) (*entity.Admin, error)
+	FindAllAdmins(sAdminID string, search string) (data []entity.Admin)
+	UpdateAdmin(admin entity.Admin) (*entity.Admin, error)
+	DeleteAdmin(sAdminID string, adminID string) error
 }
 
 type adminService struct {
@@ -43,7 +51,6 @@ func NewAdminService(
 }
 
 func (c *adminService) InsertAdmin(admin entity.Admin) (*entity.Admin, error) {
-	log.Println(admin, "asdmingh")
 	findSA, err := c.superAdminSevice.FindSuperAdminByID(strconv.Itoa(admin.SuperAdminID))
 	if err != nil {
 		return nil, errors.New("Invalid Credential")
@@ -60,9 +67,6 @@ func (c *adminService) InsertAdmin(admin entity.Admin) (*entity.Admin, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	token := c.jwtService.GenerateToken((strconv.Itoa(admin.ID)))
-	adm.Token = token
 
 	return &adm, nil
 }
@@ -119,4 +123,65 @@ func hashAndSalt(pwd []byte) string {
 		panic("Failed to hash a password")
 	}
 	return string(hash)
+}
+
+func (c *adminService) FindAdminByID(sAdminID string, adminID string) (*entity.Admin, error) {
+	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(sAdminID)
+	if err != nil {
+		return nil, err
+	}
+	_ = sAdmin
+
+	admin, err := c.adminRepo.FindAdminByID(adminID)
+	if err != nil {
+		return nil, errors.New("admin not found")
+	}
+
+	return &admin, nil
+}
+
+func (c *adminService) FindAllAdmins(sAdminID string, search string) (data []entity.Admin) {
+	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(sAdminID)
+	if err != nil {
+		return nil
+	}
+	_ = sAdmin
+
+	data = c.adminRepo.FindAllAdmins(search)
+	return
+}
+func (c *adminService) UpdateAdmin(admin entity.Admin) (*entity.Admin, error) {
+	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(strconv.Itoa(admin.SuperAdminID))
+	if err != nil {
+		return nil, errors.New("Super admin not found")
+	}
+	_ = sAdmin
+
+	adm, err := c.adminRepo.FindAdminByID(strconv.Itoa(admin.ID))
+	if err != nil {
+		return nil, err
+	}
+	_ = adm
+	admin, err = c.adminRepo.UpdateAdmin(admin)
+	if err != nil {
+		return nil, err
+	}
+
+	return &admin, nil
+}
+
+func (c *adminService) DeleteAdmin(sAdminID string, adminID string) error {
+	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(sAdminID)
+	if err != nil {
+		return nil
+	}
+	_ = sAdmin
+
+	m := c.adminRepo.DeleteAdmin(adminID)
+	if err != nil {
+		return nil
+	}
+	_ = m
+
+	return nil
 }
