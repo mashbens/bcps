@@ -2,7 +2,6 @@ package member
 
 import (
 	"github.com/mashbens/cps/business/member/entity"
-	superAdmin "github.com/mashbens/cps/business/superadmin/entity"
 )
 
 type Membership struct {
@@ -10,8 +9,9 @@ type Membership struct {
 	Type          string `gorm:"type:varchar(100)" `
 	Price         int
 	Super_adminID int
-	Super_admin   superAdmin.SuperAdmin `gorm:"foreignkey:Super_adminID" json:"-"`
+	Super_admin   entity.SuperAdmin `gorm:"foreignkey:Super_adminID" json:"-"`
 	Duration      int
+	Description   string `gorm:"type:varchar(100)" json:"-"`
 }
 
 func (m *Membership) toService() entity.Membership {
@@ -22,6 +22,7 @@ func (m *Membership) toService() entity.Membership {
 		Duration:      m.Duration,
 		Super_adminID: m.Super_adminID,
 		Super_admin:   m.Super_admin,
+		Description:   m.Description,
 	}
 }
 
@@ -33,6 +34,7 @@ func fromService(member entity.Membership) Membership {
 		Duration:      member.Duration,
 		Super_adminID: member.Super_adminID,
 		Super_admin:   member.Super_admin,
+		Description:   member.Description,
 	}
 }
 

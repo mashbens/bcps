@@ -5,18 +5,20 @@ import (
 )
 
 type MemberResp struct {
-	ID       int    `json:"id"`
-	Type     string `json:"type"`
-	Price    int    `json:"price"`
-	Duration int    `json:"duration"`
+	ID          int    `json:"id"`
+	Type        string `json:"type"`
+	Price       int    `json:"price"`
+	Duration    int    `json:"duration"`
+	Description string `json:"description"`
 }
 
 func FromService(member member.Membership) MemberResp {
 	return MemberResp{
-		ID:       member.ID,
-		Type:     member.Type,
-		Price:    member.Price,
-		Duration: member.Duration,
+		ID:          member.ID,
+		Type:        member.Type,
+		Price:       member.Price,
+		Duration:    member.Duration,
+		Description: member.Description,
 	}
 }
 

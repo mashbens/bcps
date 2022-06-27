@@ -1,7 +1,5 @@
 package entity
 
-import "github.com/mashbens/cps/business/superadmin/entity"
-
 type Admin struct {
 	ID           int
 	Name         string
@@ -9,6 +7,13 @@ type Admin struct {
 	Email        string
 	Phone        string
 	SuperAdminID int
-	SuperAdmin   entity.SuperAdmin
+	SuperAdmin   SuperAdmin
 	Token        string
+}
+
+type SuperAdmin struct {
+	ID       int
+	Name     string
+	Password string
+	Token    string
 }

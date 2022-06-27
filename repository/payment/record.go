@@ -1,18 +1,15 @@
 package payment
 
 import (
-	member "github.com/mashbens/cps/business/member/entity"
 	"github.com/mashbens/cps/business/payment/entity"
-	user "github.com/mashbens/cps/business/user/entity"
-	// ----
 )
 
 type Payment struct {
 	ID           int `gorm:"primary_key:auto_increment" json:"-"`
 	UserID       int
-	User         user.User `gorm:"foreignkey:UserID" json:"-"`
+	User         entity.User `gorm:"foreignkey:UserID" json:"-"`
 	MembershipID int
-	Membership   member.Membership `gorm:"foreignkey:MembershipID" json:"-"`
+	Membership   entity.Membership `gorm:"foreignkey:MembershipID" json:"-"`
 	Amount       int
 }
 

@@ -8,6 +8,7 @@ type CreatMemberRequest struct {
 	Price         int    `json:"price"`
 	Duration      int    `json:"duration"`
 	Super_adminID int    `json:"super_admin"`
+	Description   string `json:"description"`
 }
 
 func NewCreateMemberReq(req CreatMemberRequest) entity.Membership {
@@ -17,5 +18,6 @@ func NewCreateMemberReq(req CreatMemberRequest) entity.Membership {
 		Price:         req.Price,
 		Duration:      req.Duration,
 		Super_adminID: req.Super_adminID,
+		Description:   req.Description,
 	}
 }
