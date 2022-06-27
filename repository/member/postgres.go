@@ -32,5 +32,13 @@ func (c *MemberPostgresRepository) InserMemberships(member entity.Membership) (e
 		return record.toService(), res.Error
 	}
 	return record.toService(), nil
+}
 
+func (c *MemberPostgresRepository) FIndAllMemberType(title string) (data []entity.Membership) {
+	var record []Membership
+	res := c.db.Find(&record)
+	if res.Error != nil {
+		return []entity.Membership{}
+	}
+	return toServiceList(record)
 }

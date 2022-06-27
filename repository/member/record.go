@@ -35,3 +35,11 @@ func fromService(member entity.Membership) Membership {
 		Super_admin:   member.Super_admin,
 	}
 }
+
+func toServiceList(data []Membership) []entity.Membership {
+	a := []entity.Membership{}
+	for key := range data {
+		a = append(a, data[key].toService())
+	}
+	return a
+}
