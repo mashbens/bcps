@@ -19,3 +19,12 @@ func FromService(member member.Membership) MemberResp {
 		Duration: member.Duration,
 	}
 }
+
+func FromServiceSlice(data []member.Membership) []MemberResp {
+	var memberAray []MemberResp
+	for key := range data {
+		memberAray = append(memberAray, FromService(data[key]))
+
+	}
+	return memberAray
+}

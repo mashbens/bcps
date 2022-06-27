@@ -63,3 +63,12 @@ func (controller *MemberController) CreateMember(c echo.Context) error {
 	_response := _response.BuildSuccsessResponse("User created successfully", true, data)
 	return c.JSON(http.StatusOK, _response)
 }
+
+func (controller *MemberController) GetAllMemberType(c echo.Context) error {
+	res := controller.memberService.FIndAllMemberType("")
+
+	data := resp.FromServiceSlice(res)
+
+	_response := _response.BuildSuccsessResponse("All Membership types", true, data)
+	return c.JSON(http.StatusOK, _response)
+}
