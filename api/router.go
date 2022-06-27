@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
@@ -16,6 +17,7 @@ type Controller struct {
 	Payment    *payment.PaymentController
 	SuperAdmin *superadmin.SuperAdminController
 	Member     *member.MemberController
+	Admin      *admin.AdminController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -41,4 +43,8 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	memberRoutes := e.Group("/api/v1/member")
 	memberRoutes.POST("/create-member", controller.Member.CreateMember)
 	memberRoutes.GET("/list", controller.Member.GetAllMemberType)
+
+	adminRoutes := e.Group("/api/v1/admin")
+	adminRoutes.POST("/create-admin", controller.Admin.RegisteAdmin)
+	adminRoutes.POST("/login", controller.Admin.LoginAdmin)
 }
