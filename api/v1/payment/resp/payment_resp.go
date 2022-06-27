@@ -2,8 +2,6 @@ package resp
 
 import (
 	payment "github.com/mashbens/cps/business/payment/entity"
-	// member "github.com/mashbens/cps/api/v1/member/resp"
-	// user "github.com/mashbens/cps/api/v1/user/resp"
 )
 
 type PaymentResp struct {

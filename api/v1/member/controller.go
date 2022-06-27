@@ -26,7 +26,6 @@ func NewMemberController(
 
 ) *MemberController {
 	return &MemberController{
-
 		memberService: memberService,
 		jwtService:    jwtService,
 	}
