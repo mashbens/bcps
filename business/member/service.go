@@ -2,7 +2,6 @@ package member
 
 import (
 	"errors"
-	"log"
 	"strconv"
 
 	"github.com/mashbens/cps/business/member/entity"
@@ -12,11 +11,13 @@ import (
 type MemberRepo interface {
 	FindMemberByID(memberID string) (entity.Membership, error)
 	InserMemberships(member entity.Membership) (entity.Membership, error)
+	FIndAllMemberType(title string) (data []entity.Membership)
 }
 
 type MemberService interface {
 	FindMemberTypeByID(memberID string) (*entity.Membership, error)
 	CreateMemberships(member entity.Membership) (*entity.Membership, error)
+	FIndAllMemberType(search string) (data []entity.Membership)
 }
 
 type memberService struct {
@@ -32,6 +33,11 @@ func NewMemberService(
 		memberRepo:       MemberRepo,
 		superAdminSevice: superAdminSevice,
 	}
+}
+
+func (c *memberService) FIndAllMemberType(search string) (data []entity.Membership) {
+	data = c.memberRepo.FIndAllMemberType(search)
+	return
 }
 
 func (c *memberService) FindMemberTypeByID(memberID string) (*entity.Membership, error) {
@@ -54,7 +60,6 @@ func (c *memberService) CreateMemberships(member entity.Membership) (*entity.Mem
 	_ = sAdmin
 	// member.Super_admin = *sAdmin
 
-	log.Println(member)
 	m, err := c.memberRepo.InserMemberships(member)
 	if err != nil {
 		return nil, err
