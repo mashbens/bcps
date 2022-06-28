@@ -4,6 +4,7 @@ import (
 	"github.com/mashbens/cps/api"
 	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
+	"github.com/mashbens/cps/api/v1/classon"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
 	"github.com/mashbens/cps/api/v1/superadmin"
@@ -27,8 +28,11 @@ import (
 	superAdminService "github.com/mashbens/cps/business/superadmin"
 	superAdminRepo "github.com/mashbens/cps/repository/superadmin"
 
-	AdminService "github.com/mashbens/cps/business/admin"
-	AdminRepo "github.com/mashbens/cps/repository/admin"
+	adminService "github.com/mashbens/cps/business/admin"
+	adminRepo "github.com/mashbens/cps/repository/admin"
+
+	classOnService "github.com/mashbens/cps/business/classon"
+	classOnRepo "github.com/mashbens/cps/repository/classon"
 )
 
 func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) api.Controller {
@@ -41,8 +45,8 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 	superAdminRepo := superAdminRepo.SuperAdminRepositoryFactory(dbCon)
 	superAdminService := superAdminService.NewSuperAdminService(superAdminRepo, jwtService)
 
-	AdminRepo := AdminRepo.AdminRepositoryFactory(dbCon)
-	AdminService := AdminService.NewAdminService(AdminRepo, jwtService, superAdminService)
+	adminRepo := adminRepo.AdminRepositoryFactory(dbCon)
+	adminService := adminService.NewAdminService(adminRepo, jwtService, superAdminService)
 
 	memberRepo := memberRepo.MemberRepoFactory(dbCon)
 	memberService := memberService.NewMemberService(memberRepo, superAdminService)
@@ -50,13 +54,17 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 	paymentRepo := paymentRepo.PaymentRepositoryFactory(dbCon)
 	paymentService := paymentService.NewPaymentService(paymentRepo, memberService, userService)
 
+	classOnRepo := classOnRepo.ClassOnRepoFactory(dbCon)
+	classOnService := classOnService.NewClassOnService(classOnRepo, adminService)
+
 	controller := api.Controller{
 		UserAuth:   auth.NewAuthController(authService, userService),
 		User:       user.NewUserController(userService, jwtService),
 		Payment:    payment.NewPaymentController(paymentService, jwtService),
 		SuperAdmin: superadmin.NewSuperAdminController(superAdminService),
 		Member:     member.NewMemberController(memberService, jwtService),
-		Admin:      admin.NewAdminController(AdminService, jwtService),
+		Admin:      admin.NewAdminController(adminService, jwtService),
+		ClassOn:    classon.NewClassController(classOnService, jwtService),
 	}
 	return controller
 }
