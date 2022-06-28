@@ -32,7 +32,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	userRoutes.GET("/profile", controller.User.Profile)
 	userRoutes.PUT("/profile", controller.User.Update)
 
-	paymentRoutes := e.Group("/api/v1/membership")
+	paymentRoutes := e.Group("/api/v1/member")
 	paymentRoutes.POST("/register", controller.Payment.CreatePayment)
 	paymentRoutes.GET("/details", controller.Payment.GetPaymentDetail)
 
