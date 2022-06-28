@@ -73,7 +73,7 @@ func (controller *ClassOnController) GetClassOnlineByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, response)
 	}
 	data := resp.FromService(*class)
-	_response := _response.BuildSuccsessResponse("Member found", true, data)
+	_response := _response.BuildSuccsessResponse("Class found", true, data)
 	return c.JSON(http.StatusOK, _response)
 }
 
@@ -82,7 +82,7 @@ func (controller *ClassOnController) GetAllClasOnline(c echo.Context) error {
 
 	data := resp.FromServiceSlice(res)
 
-	_response := _response.BuildSuccsessResponse("All Membership types", true, data)
+	_response := _response.BuildSuccsessResponse("All Class found", true, data)
 	return c.JSON(http.StatusOK, _response)
 }
 func (controller *ClassOnController) UpdateClassOnline(c echo.Context) error {
@@ -117,7 +117,7 @@ func (controller *ClassOnController) UpdateClassOnline(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, response)
 	}
 	data := resp.FromService(*class)
-	_response := _response.BuildSuccsessResponse("Member found", true, data)
+	_response := _response.BuildSuccsessResponse("Class Updated", true, data)
 	return c.JSON(http.StatusOK, _response)
 }
 
@@ -134,11 +134,11 @@ func (controller *ClassOnController) DeleteClassOnline(c echo.Context) error {
 	}
 	claims := token.Claims.(jwt.MapClaims)
 	adminID := fmt.Sprintf("%v", claims["user_id"])
-	memberID := c.Param("id")
+	classID := c.Param("id")
 
-	member := controller.classOnService.DeleteClassOn(adminID, memberID)
-	_ = member
+	class := controller.classOnService.DeleteClassOn(adminID, classID)
+	_ = class
 
-	_response := _response.BuildSuccsessResponse("Member Deleted", true, nil)
+	_response := _response.BuildSuccsessResponse("Class Deleted", true, nil)
 	return c.JSON(http.StatusOK, _response)
 }
