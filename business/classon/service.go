@@ -26,8 +26,8 @@ type ClassOnService interface {
 }
 
 type clasOnService struct {
-	classOnRepo ClassOnRepo
-	adminSevice admin.AdminService
+	classOnRepo  ClassOnRepo
+	adminService admin.AdminService
 }
 
 func NewClassOnService(
@@ -35,8 +35,8 @@ func NewClassOnService(
 	adminService admin.AdminService,
 ) ClassOnService {
 	return &clasOnService{
-		classOnRepo: ClassOnRepo,
-		adminSevice: adminService,
+		classOnRepo:  ClassOnRepo,
+		adminService: adminService,
 	}
 }
 
@@ -50,7 +50,7 @@ func (c *clasOnService) FindClassOnByID(classID string) (*entity.Classon, error)
 }
 func (c *clasOnService) InserClassOn(class entity.Classon) (*entity.Classon, error) {
 	adminID := strconv.Itoa(class.AdminID)
-	admin, err := c.adminSevice.FindAdminByID(adminID)
+	admin, err := c.adminService.FindAdminByID(adminID)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (c *clasOnService) FindAllClassOn(search string) (data []entity.Classon) {
 }
 
 func (c *clasOnService) UpdateClassOn(class entity.Classon) (*entity.Classon, error) {
-	admin, err := c.adminSevice.FindAdminByID(strconv.Itoa(class.AdminID))
+	admin, err := c.adminService.FindAdminByID(strconv.Itoa(class.AdminID))
 	if err != nil {
 		return nil, errors.New("Admin not found")
 	}
@@ -85,7 +85,7 @@ func (c *clasOnService) UpdateClassOn(class entity.Classon) (*entity.Classon, er
 
 }
 func (c *clasOnService) DeleteClassOn(adminID string, classID string) error {
-	admin, err := c.adminSevice.FindAdminByID(adminID)
+	admin, err := c.adminService.FindAdminByID(adminID)
 	if err != nil {
 		return nil
 	}
@@ -99,7 +99,7 @@ func (c *clasOnService) DeleteClassOn(adminID string, classID string) error {
 }
 
 // func (c *clasOnService) FindClassOnByAdmin(adminID string, classID string) (*entity.Classon, error) {
-// 	admin, err := c.adminSevice.FindAdminByID(adminID)
+// 	admin, err := c.adminService.FindAdminByID(adminID)
 // 	if err != nil {
 // 		return nil, err
 // 	}
