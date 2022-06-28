@@ -98,6 +98,10 @@ func (r *PostgresRepository) UpdateUser(user entity.User) (entity.User, error) {
 		record.Phone = tempRecord.Phone
 	}
 
+	if record.Phone == tempRecord.Phone {
+		record.Phone = tempRecord.Phone
+	}
+
 	if record.Name != "" {
 		record.Name = user.Name
 	} else {
