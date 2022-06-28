@@ -98,7 +98,7 @@ func (controller *AdminController) FindAdminByID(c echo.Context) error {
 	sAdminID := fmt.Sprintf("%v", claims["user_id"])
 	adminID := c.Param("id")
 
-	admin, err := controller.adminService.FindAdminByID(sAdminID, adminID)
+	admin, err := controller.adminService.FindAdminBySA(sAdminID, adminID)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusInternalServerError, response)
