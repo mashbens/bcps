@@ -10,7 +10,7 @@ func ClassOnRepoFactory(dbCon *util.DatabaseConnection) classon.ClassOnRepo {
 
 	if dbCon.Driver == util.PostgreSQL {
 		classOnRepository = NewClassOnPostgresRepo(dbCon.PostgreSQL)
-		dbCon.PostgreSQL.AutoMigrate(&ClassOnline{})
+		dbCon.PostgreSQL.AutoMigrate(&Onlineclass{})
 
 	} else {
 		panic("Database driver not supported")

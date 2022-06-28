@@ -17,7 +17,7 @@ func NewClassOnPostgresRepo(db *gorm.DB) classon.ClassOnRepo {
 }
 
 func (c *ClassOnPostgresRepo) FindClassOnByID(classID string) (entity.Classon, error) {
-	var record ClassOnline
+	var record Onlineclass
 	res := c.db.Where("id = ?", classID).Take(&record)
 	if res.Error != nil {
 		return record.toService(), res.Error
@@ -37,7 +37,7 @@ func (c *ClassOnPostgresRepo) InserClassOn(class entity.Classon) (entity.Classon
 }
 
 func (c *ClassOnPostgresRepo) FindAllClassOn(search string) (data []entity.Classon) {
-	var record []ClassOnline
+	var record []Onlineclass
 	res := c.db.Find(&record)
 	if res.Error != nil {
 		return []entity.Classon{}
@@ -54,7 +54,7 @@ func (c *ClassOnPostgresRepo) UpdateClassOn(class entity.Classon) (entity.Classo
 	return record.toService(), nil
 }
 func (c *ClassOnPostgresRepo) DeleteClassOn(classID string) error {
-	record := []ClassOnline{}
+	record := []Onlineclass{}
 	res := c.db.Delete(&record, classID)
 	if res.Error != nil {
 		return nil
