@@ -79,10 +79,10 @@ func (c *paymentService) CreatePayment(paymentReq entity.Payment) (*entity.Payme
 	snap := c.PaymentMidtrans(payment.ID, member.Type, payment.Amount)
 	payment.SnapURL = snap
 
-	membertoPayment := entity.MemberToPayment(*member)
+	membertoPayment := MemberToPayment(*member)
 	payment.Membership = membertoPayment
 
-	usertoPayment := entity.UserToPayment(*user)
+	usertoPayment := UserToPayment(*user)
 	payment.User = usertoPayment
 
 	return &payment, nil
@@ -106,17 +106,11 @@ func (c *paymentService) FindPaymentDetails(userID string) (*entity.Payment, err
 		return nil, err
 	}
 
-	payment.Membership.ID = member.ID
-	payment.Membership.Type = member.Type
-	payment.Membership.Price = member.Price
-	payment.Membership.Duration = member.Duration
+	membertoPayment := MemberToPayment(*member)
+	payment.Membership = membertoPayment
 
-	payment.User.ID = user.ID
-	payment.User.Name = user.Name
-	payment.User.Email = user.Name
-	payment.User.Phone = user.Phone
-	payment.User.Member_expired = user.Member_expired
-	payment.User.Member_type = user.Member_type
+	usertoPayment := UserToPayment(*user)
+	payment.User = usertoPayment
 
 	return &payment, nil
 

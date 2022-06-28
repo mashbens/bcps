@@ -25,7 +25,8 @@ type AdminService interface {
 	InsertAdmin(admin entity.Admin) (*entity.Admin, error)
 	FindAdminByEmail(email string) (*entity.Admin, error)
 	AdminLogin(admin entity.Admin) (*entity.Admin, error)
-	FindAdminByID(sAdminID string, adminID string) (*entity.Admin, error)
+	FindAdminBySA(sAdminID string, adminID string) (*entity.Admin, error)
+	FindAdminByID(adminID string) (*entity.Admin, error)
 	FindAllAdmins(sAdminID string, search string) (data []entity.Admin)
 	UpdateAdmin(admin entity.Admin) (*entity.Admin, error)
 	DeleteAdmin(sAdminID string, adminID string) error
@@ -116,6 +117,15 @@ func (c *adminService) FindAdminByEmail(email string) (*entity.Admin, error) {
 	return &admin, nil
 }
 
+func (c *adminService) FindAdminByID(adminID string) (*entity.Admin, error) {
+	admin, err := c.adminRepo.FindAdminByID(adminID)
+	if err != nil {
+		return nil, errors.New("admin not found")
+	}
+
+	return &admin, nil
+}
+
 func hashAndSalt(pwd []byte) string {
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
 	if err != nil {
@@ -125,7 +135,7 @@ func hashAndSalt(pwd []byte) string {
 	return string(hash)
 }
 
-func (c *adminService) FindAdminByID(sAdminID string, adminID string) (*entity.Admin, error) {
+func (c *adminService) FindAdminBySA(sAdminID string, adminID string) (*entity.Admin, error) {
 	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(sAdminID)
 	if err != nil {
 		return nil, err

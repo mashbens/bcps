@@ -1,10 +1,5 @@
 package entity
 
-import (
-	_member "github.com/mashbens/cps/business/member/entity"
-	_user "github.com/mashbens/cps/business/user/entity"
-)
-
 type Payment struct {
 	ID           int
 	UserID       int
@@ -33,24 +28,4 @@ type Membership struct {
 	Price         int
 	Duration      int
 	Super_adminID int
-}
-
-func MemberToPayment(data _member.Membership) Membership {
-	return Membership{
-		ID:       data.ID,
-		Type:     data.Type,
-		Price:    data.Price,
-		Duration: data.Duration,
-	}
-}
-
-func UserToPayment(data _user.User) User {
-	return User{
-		ID:             data.ID,
-		Name:           data.Name,
-		Email:          data.Email,
-		Phone:          data.Phone,
-		Member_expired: data.Member_expired,
-		Member_type:    data.Member_type,
-	}
 }
