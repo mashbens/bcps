@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
+	"github.com/mashbens/cps/api/v1/classon"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
 	"github.com/mashbens/cps/api/v1/superadmin"
@@ -18,6 +19,7 @@ type Controller struct {
 	SuperAdmin *superadmin.SuperAdminController
 	Member     *member.MemberController
 	Admin      *admin.AdminController
+	ClassOn    *classon.ClassOnController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -30,7 +32,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 
 	userRoutes := e.Group("/api/v1/user")
 	userRoutes.GET("/profile", controller.User.Profile)
-	userRoutes.PUT("/profile", controller.User.Update)
+	userRoutes.DELETE("/profile", controller.User.Update)
 
 	paymentRoutes := e.Group("/api/v1/member")
 	paymentRoutes.POST("/register", controller.Payment.CreatePayment)
@@ -54,4 +56,11 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminRoutes.GET("/:id", controller.Admin.FindAdminByID)
 	adminRoutes.PUT("/:id", controller.Admin.UpdateAdmin)
 	adminRoutes.DELETE("/:id", controller.Admin.DeleteAdmin)
+
+	adminClass := e.Group("/api/v1/class-online")
+	adminClass.POST("/create-class", controller.ClassOn.CreateClassOnline)
+	adminClass.GET("/list", controller.ClassOn.GetAllClasOnline)
+	adminClass.GET("/:id", controller.ClassOn.GetClassOnlineByID)
+	adminClass.PUT("/:id", controller.ClassOn.UpdateClassOnline)
+	adminClass.DELETE("/:id", controller.ClassOn.DeleteClassOnline)
 }
