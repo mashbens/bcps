@@ -6,7 +6,9 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/mailjet/mailjet-apiv3-go"
 	"github.com/mashbens/cps/business/user/entity"
+	"github.com/mashbens/cps/config"
 	"github.com/pquerna/otp"
 	"github.com/pquerna/otp/totp"
 	"github.com/xlzd/gotp"
@@ -181,45 +183,47 @@ func (c *authService) SendOTPtoEmail(otp string, name string, email string) erro
 }
 
 func (c *authService) SendEmailVerification(email string) (*entity.User, error) {
-	// config := config.GetConfig()
+	config := config.GetConfig()
 
-	// companyEmail := config.Mailjet.Email
-	// publicKey := config.Mailjet.PublicKey
-	// privateKey := config.Mailjet.PrivateKey
-	// otp := c.GenerateTOTP(email)
+	companyEmail := config.Mailjet.Email
+	publicKey := config.Mailjet.PublicKey
+	privateKey := config.Mailjet.PrivateKey
+	otp := c.GenerateTOTP(email)
 
-	// mailjetClient := mailjet.NewMailjetClient(publicKey, privateKey)
-	// htmlpart := fmt.Sprintf(`<H3> Dibawah ini adalah kode verifikasi Forgot Password kamu<H3/><h1>%s</h1>`, otp)
-	// messagesInfo := []mailjet.InfoMessagesV31{
-	// 	{
-	// 		From: &mailjet.RecipientV31{
-	// 			Email: companyEmail,
-	// 			Name:  "GYM30",
-	// 		},
-	// 		To: &mailjet.RecipientsV31{
-	// 			mailjet.RecipientV31{
-	// 				Email: email,
-	// 				Name:  email,
-	// 			},
-	// 		},
-	// 		Subject:  "Forgot Password OTP Key GYM30",
-	// 		TextPart: otp,
-	// 		HTMLPart: htmlpart,
-	// 		CustomID: "AppGettingStartedTest",
-	// 	},
-	// }
-	// messages := mailjet.MessagesV31{Info: messagesInfo}
-	// res, err := mailjetClient.SendMailV31(&messages)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	return nil, err
-	// }
-	// log.Println(res)
+	mailjetClient := mailjet.NewMailjetClient(publicKey, privateKey)
+	htmlpart := fmt.Sprintf(`<H3> Dibawah ini adalah kode verifikasi Forgot Password kamu<H3/><h1>%s</h1>`, otp)
+	messagesInfo := []mailjet.InfoMessagesV31{
+		{
+			From: &mailjet.RecipientV31{
+				Email: companyEmail,
+				Name:  "GYM30",
+			},
+			To: &mailjet.RecipientsV31{
+				mailjet.RecipientV31{
+					Email: email,
+					Name:  email,
+				},
+			},
+			Subject:  "Forgot Password OTP Key GYM30",
+			TextPart: otp,
+			HTMLPart: htmlpart,
+			CustomID: "AppGettingStartedTest",
+		},
+	}
+	messages := mailjet.MessagesV31{Info: messagesInfo}
+	res, err := mailjetClient.SendMailV31(&messages)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	log.Println(res)
 
 	user, err := c.userService.FindUserByEmail(email)
 	if err != nil {
 		return nil, err
 	}
+
+	user.Totp = otp
 
 	return user, nil
 }
