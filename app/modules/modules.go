@@ -4,9 +4,7 @@ import (
 	"github.com/mashbens/cps/api"
 	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
-	"github.com/mashbens/cps/api/v1/classoff"
-
-	"github.com/mashbens/cps/api/v1/classon"
+	"github.com/mashbens/cps/api/v1/class"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
 	"github.com/mashbens/cps/api/v1/superadmin"
@@ -33,11 +31,8 @@ import (
 	adminService "github.com/mashbens/cps/business/admin"
 	adminRepo "github.com/mashbens/cps/repository/admin"
 
-	classOnService "github.com/mashbens/cps/business/classon"
-	classOnRepo "github.com/mashbens/cps/repository/classon"
-
-	classOffService "github.com/mashbens/cps/business/classoff"
-	classOffRepo "github.com/mashbens/cps/repository/classoff"
+	classService "github.com/mashbens/cps/business/class"
+	classRepo "github.com/mashbens/cps/repository/class"
 )
 
 func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) api.Controller {
@@ -59,11 +54,8 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 	paymentRepo := paymentRepo.PaymentRepositoryFactory(dbCon)
 	paymentService := paymentService.NewPaymentService(paymentRepo, memberService, userService)
 
-	classOnRepo := classOnRepo.ClassOnRepoFactory(dbCon)
-	classOnService := classOnService.NewClassOnService(classOnRepo, adminService)
-
-	classOffRepo := classOffRepo.ClassOffRepoFactory(dbCon)
-	classOffService := classOffService.NewClassOffService(classOffRepo, adminService)
+	classRepo := classRepo.ClassRepoFactory(dbCon)
+	classService := classService.NewClassService(classRepo, adminService)
 
 	controller := api.Controller{
 		UserAuth:   auth.NewAuthController(authService, userService),
@@ -72,8 +64,7 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 		SuperAdmin: superadmin.NewSuperAdminController(superAdminService),
 		Member:     member.NewMemberController(memberService, jwtService),
 		Admin:      admin.NewAdminController(adminService, jwtService),
-		ClassOn:    classon.NewClassController(classOnService, jwtService),
-		ClassOff:   classoff.NewClassController(classOffService, jwtService),
+		Class:      class.NewClassController(classService, jwtService),
 	}
 	return controller
 }
