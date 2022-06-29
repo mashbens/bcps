@@ -1,12 +1,13 @@
 package entity
 
-type Classon struct {
+type Class struct {
 	ID          int
 	Classname   string
 	Trainer     string
 	Date        string
 	Clock       string
 	Description string
+	ClassType   string
 	AdminID     int
 	Admin       Admin
 }
