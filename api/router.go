@@ -3,8 +3,7 @@ package api
 import (
 	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
-	"github.com/mashbens/cps/api/v1/classoff"
-	"github.com/mashbens/cps/api/v1/classon"
+	"github.com/mashbens/cps/api/v1/class"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
 	"github.com/mashbens/cps/api/v1/superadmin"
@@ -20,8 +19,7 @@ type Controller struct {
 	SuperAdmin *superadmin.SuperAdminController
 	Member     *member.MemberController
 	Admin      *admin.AdminController
-	ClassOn    *classon.ClassOnController
-	ClassOff   *classoff.ClassOffController
+	Class      *class.ClassController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -59,17 +57,15 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminRoutes.PUT("/:id", controller.Admin.UpdateAdmin)
 	adminRoutes.DELETE("/:id", controller.Admin.DeleteAdmin)
 
-	adminClassOn := e.Group("/api/v1/class-online")
-	adminClassOn.POST("/create-class", controller.ClassOn.CreateClassOnline)
-	adminClassOn.GET("/list", controller.ClassOn.GetAllClasOnline)
-	adminClassOn.GET("/:id", controller.ClassOn.GetClassOnlineByID)
-	adminClassOn.PUT("/:id", controller.ClassOn.UpdateClassOnline)
-	adminClassOn.DELETE("/:id", controller.ClassOn.DeleteClassOnline)
+	adminClass := e.Group("/api/v1/class")
+	adminClass.POST("/create-class", controller.Class.CreateClass)
+	adminClass.GET("/list", controller.Class.GetAllClass)
+	adminClass.GET("/online/list", controller.Class.GetAllClasOnline)
+	adminClass.GET("/offline/list", controller.Class.GetAllClasOffline)
 
-	adminClassOff := e.Group("/api/v1/class-offline")
-	adminClassOff.POST("/create-class", controller.ClassOff.CreateClassOffline)
-	adminClassOff.GET("/list", controller.ClassOff.GetAllClassOffline)
-	adminClassOff.GET("/:id", controller.ClassOff.GetClassOfflineByID)
-	adminClassOff.PUT("/:id", controller.ClassOff.UpdateClassOffline)
-	adminClassOff.DELETE("/:id", controller.ClassOff.DeleteClassOffline)
+	adminClass.GET("/online/:id", controller.Class.GetClassOnlineByID)
+	adminClass.GET("/offline/:id", controller.Class.GetClassOfflineByID)
+	adminClass.PUT("/:id", controller.Class.UpdateClass)
+	adminClass.DELETE("/:id", controller.Class.DeleteClass)
+
 }

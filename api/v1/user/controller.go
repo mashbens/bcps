@@ -47,7 +47,7 @@ func (controller *UserController) Profile(c echo.Context) error {
 	user, err := controller.userService.FindUserByID(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromServiceUser(*user)
@@ -70,21 +70,21 @@ func (controller *UserController) Update(c echo.Context) error {
 	claims := token.Claims.(jwt.MapClaims)
 	if err := c.Bind(&userReq); err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	id := fmt.Sprintf("%v", claims["user_id"])
 	intID, err := strconv.Atoi(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	userReq.ID = intID
 	user, err := controller.userService.UpdateUser(request.NewUpdateUserRequest(userReq))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromServiceUser(*user)
