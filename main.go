@@ -16,6 +16,7 @@ import (
 	"github.com/mashbens/cps/util"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -26,6 +27,10 @@ func main() {
 	controllers := modules.RegisterModules(dbCon, config)
 
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Cinta bukan tentang siapa yang kita kenal paling lama, bukan yang datang pertama atau paling perhatian, tetapi tentang siapa yang datang dan tidak pergi. - Sujiwo Tejo")
