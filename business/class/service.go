@@ -10,6 +10,7 @@ import (
 
 type ClassRepo interface {
 	FindAllClass(search string) (data []entity.Class)
+	FindClassByID(classID string) (entity.Class, error)
 	FindAllClassOn(search string) (data []entity.Class)
 	FindAllClassOff(search string) (data []entity.Class)
 	FindClassOnByID(classID string) (entity.Class, error)
@@ -22,6 +23,7 @@ type ClassRepo interface {
 
 type ClassService interface {
 	FindAllClass(search string) (data []entity.Class)
+	FindClassByID(classID string) (*entity.Class, error)
 	FindAllClassOn(search string) (data []entity.Class)
 	FindAllClassOff(search string) (data []entity.Class)
 	FindClassOnByID(classID string) (*entity.Class, error)
@@ -83,6 +85,15 @@ func (c *clasService) DeleteClass(adminID string, classID string) error {
 	cls := c.classRepo.DeleteClass(classID)
 	_ = cls
 	return nil
+}
+
+func (c *clasService) FindClassByID(classID string) (*entity.Class, error) {
+	class, err := c.classRepo.FindClassByID(classID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &class, nil
 }
 
 func (c *clasService) FindAllClass(search string) (data []entity.Class) {

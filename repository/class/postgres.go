@@ -47,6 +47,15 @@ func (c *ClassPostgresRepo) DeleteClass(classID string) error {
 
 }
 
+func (c *ClassPostgresRepo) FindClassByID(classID string) (entity.Class, error) {
+	var record Class
+	res := c.db.Where("id = ?", classID).Take(&record)
+	if res.Error != nil {
+		return record.toService(), res.Error
+	}
+
+	return record.toService(), nil
+}
 func (c *ClassPostgresRepo) FindAllClass(classID string) (data []entity.Class) {
 	var record []Class
 	res := c.db.Find(&record)
@@ -89,50 +98,3 @@ func (c *ClassPostgresRepo) FindAllClassOff(search string) (data []entity.Class)
 	}
 	return toServiceList(record)
 }
-
-// ---
-// func (c *ClassPostgresRepo) FindClassOffByID(classID string) (entity.Class, error) {
-// 	var record Class
-// 	res := c.db.Where("id = ?", classID).Take(&record)
-// 	if res.Error != nil {
-// 		return record.toService(), res.Error
-// 	}
-// 	return record.toService(), nil
-// }
-
-// func (c *ClassPostgresRepo) InserClassOff(class entity.Class) (entity.Class, error) {
-
-// 	record := fromService(class)
-// 	res := c.db.Create(&record)
-
-// 	if res.Error != nil {
-// 		return record.toService(), res.Error
-// 	}
-// 	return record.toService(), nil
-// }
-
-// func (c *ClassPostgresRepo) FindAllClassOff(search string) (data []entity.Class) {
-// 	var record []Class
-// 	res := c.db.Find(&record)
-// 	if res.Error != nil {
-// 		return []entity.Class{}
-// 	}
-// 	return toServiceList(record)
-// }
-// func (c *ClassPostgresRepo) UpdateClassOff(class entity.Class) (entity.Class, error) {
-// 	record := fromService(class)
-// 	res := c.db.Model(&record).Updates(map[string]interface{}{"classname": class.Classname, "trainer": class.Trainer, "date": class.Date, "clock": class.Clock, "description": class.Description})
-// 	if res.Error != nil {
-// 		return record.toService(), res.Error
-// 	}
-
-// 	return record.toService(), nil
-// }
-// func (c *ClassPostgresRepo) DeleteClassOff(classID string) error {
-// 	record := []Class{}
-// 	res := c.db.Delete(&record, classID)
-// 	if res.Error != nil {
-// 		return nil
-// 	}
-// 	return nil
-// }

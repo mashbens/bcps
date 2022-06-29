@@ -40,6 +40,19 @@ func (controller *ClassController) GetAllClass(c echo.Context) error {
 	return c.JSON(http.StatusOK, _response)
 }
 
+func (controller *ClassController) GetClassByID(c echo.Context) error {
+	id := c.Param("id")
+
+	class, err := controller.classService.FindClassByID(id)
+	if err != nil {
+		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
+		return c.JSON(http.StatusInternalServerError, response)
+	}
+	data := resp.FromService(*class)
+	_response := _response.BuildSuccsessResponse("Member found", true, data)
+	return c.JSON(http.StatusOK, _response)
+}
+
 // find all online class
 func (controller *ClassController) GetAllClasOnline(c echo.Context) error {
 	res := controller.classService.FindAllClassOn("")

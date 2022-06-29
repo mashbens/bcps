@@ -60,6 +60,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminClass := e.Group("/api/v1/class")
 	adminClass.POST("/create-class", controller.Class.CreateClass)
 	adminClass.GET("/list", controller.Class.GetAllClass)
+	adminClass.GET("/:id", controller.Class.GetClassByID)
 	adminClass.GET("/online/list", controller.Class.GetAllClasOnline)
 	adminClass.GET("/offline/list", controller.Class.GetAllClasOffline)
 
