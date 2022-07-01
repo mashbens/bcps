@@ -41,10 +41,6 @@ func (controller *AuthController) RegisterHandler(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Password must be at least 6 characters", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
-	if len(newUser.Phone) < 1 {
-		response := _response.BuildErrorResponse("Failed to process request", "Phone must be at least 1 character", nil)
-		return c.JSON(http.StatusBadRequest, response)
-	}
 
 	user, err := controller.authService.Register(request.NewRegisterRequest(newUser))
 	if err != nil {

@@ -112,6 +112,16 @@ func (controller *ClassController) CreateClass(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
+	if newClass.Classname == "" || newClass.ClasType == "" || newClass.Capacity == 0 || newClass.Date == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+	if newClass.Clock == "" || newClass.Trainer == "" || newClass.Duration == 0 || newClass.Description == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)

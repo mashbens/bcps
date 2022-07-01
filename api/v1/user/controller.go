@@ -72,6 +72,14 @@ func (controller *UserController) Update(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+	if userReq.Email == "" || userReq.Password == "" || userReq.Name == "" || userReq.Phone == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+	if len(userReq.Password) < 6 {
+		response := _response.BuildErrorResponse("Failed to process request", "Password must be at least 6 characters", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
 
 	id := fmt.Sprintf("%v", claims["user_id"])
 	intID, err := strconv.Atoi(id)

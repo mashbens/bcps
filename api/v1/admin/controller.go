@@ -40,6 +40,12 @@ func (controller *AdminController) RegisteAdmin(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
+	if newAdmin.Email == "" || newAdmin.Password == "" || newAdmin.Name == "" || newAdmin.Phone == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
@@ -137,6 +143,12 @@ func (controller *AdminController) UpdateAdmin(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
+	if newAdmin.Email == "" || newAdmin.Password == "" || newAdmin.Name == "" || newAdmin.Phone == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)

@@ -40,6 +40,12 @@ func (controller *MemberController) CreateMember(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
+	if newMember.Type == "" || newMember.Price == 0 || newMember.Duration == 0 || newMember.Description == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
@@ -96,6 +102,12 @@ func (controller *MemberController) UpdateMemberType(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
+	if newMember.Type == "" || newMember.Price == 0 || newMember.Duration == 0 || newMember.Description == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
