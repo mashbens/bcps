@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
+	"github.com/mashbens/cps/api/v1/booking"
 	"github.com/mashbens/cps/api/v1/class"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
@@ -20,6 +21,7 @@ type Controller struct {
 	Member     *member.MemberController
 	Admin      *admin.AdminController
 	Class      *class.ClassController
+	Booking    *booking.BookingController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -69,4 +71,6 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminClass.PUT("/:id", controller.Class.UpdateClass)
 	adminClass.DELETE("/:id", controller.Class.DeleteClass)
 
+	bookingClass := e.Group("/api/v1/class")
+	bookingClass.POST("/booking", controller.Booking.CreateBooking)
 }
