@@ -7,8 +7,8 @@ import (
 type Admin struct {
 	ID           int    `gorm:"primary_key:auto_increment" json:"-"`
 	Name         string `gorm:"type:varchar(100)" json:"-"`
-	Email        string `gorm:"type:varchar(100);unique;" json:"-"`
-	Phone        string `gorm:"type:varchar(100);unique;" json:"-"`
+	Email        string `gorm:"type:varchar(100)" json:"-"`
+	Phone        string `gorm:"type:varchar(100)" json:"-"`
 	Password     string `gorm:"type:varchar(100)" json:"-"`
 	SuperAdminID int
 	SuperAdmin   entity.SuperAdmin `gorm:"foreignkey:SuperAdminID" json:"-"`

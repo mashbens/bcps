@@ -29,7 +29,7 @@ func (c *ClassPostgresRepo) InsertClass(class entity.Class) (entity.Class, error
 
 func (c *ClassPostgresRepo) UpdateClass(class entity.Class) (entity.Class, error) {
 	record := fromService(class)
-	res := c.db.Model(&record).Updates(map[string]interface{}{"classname": class.Classname, "trainer": class.Trainer, "date": class.Date, "clock": class.Clock, "description": class.Description, "class_type": class.ClassType})
+	res := c.db.Model(&record).Updates(map[string]interface{}{"classname": class.Classname, "trainer": class.Trainer, "date": class.Date, "clock": class.Clock, "description": class.Description, "class_type": class.ClassType, "capacity": class.Capacity})
 	if res.Error != nil {
 		return record.toService(), res.Error
 	}
@@ -97,4 +97,23 @@ func (c *ClassPostgresRepo) FindAllClassOff(search string) (data []entity.Class)
 		return []entity.Class{}
 	}
 	return toServiceList(record)
+}
+
+func (c *ClassPostgresRepo) UpdateClassStatus(classID string, status string) error {
+	var record Class
+	res := c.db.Model(&record).Where("id = ?", classID).Update("status", status)
+
+	if res != nil {
+		return nil
+	}
+	return nil
+}
+
+func (c *ClassPostgresRepo) UpdateUserBooked(classID string, userBooked int) error {
+	var record Class
+	res := c.db.Model(&record).Where("id = ?", classID).Update("user_booked", userBooked)
+	if res != nil {
+		return nil
+	}
+	return nil
 }

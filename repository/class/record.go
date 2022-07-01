@@ -12,6 +12,10 @@ type Class struct {
 	Clock       string `gorm:"type:varchar(100)" `
 	Description string `gorm:"type:varchar(100)" `
 	ClassType   string `gorm:"type:varchar(100)" `
+	Capacity    int
+	UserBooked  int
+	Duration    int
+	Status      string `gorm:"type:varchar(100)" `
 	AdminID     int
 	Admin       Admin `gorm:"ForeignKey:AdminID"`
 }
@@ -33,6 +37,10 @@ func (c *Class) toService() entity.Class {
 		Clock:       c.Clock,
 		Description: c.Description,
 		ClassType:   c.ClassType,
+		Status:      c.Status,
+		Capacity:    c.Capacity,
+		UserBooked:  c.UserBooked,
+		Duration:    c.Duration,
 		AdminID:     c.AdminID,
 		Admin:       entity.Admin(c.Admin),
 	}
@@ -47,6 +55,10 @@ func fromService(c entity.Class) Class {
 		Clock:       c.Clock,
 		Description: c.Description,
 		ClassType:   c.ClassType,
+		Status:      c.Status,
+		Capacity:    c.Capacity,
+		UserBooked:  c.UserBooked,
+		Duration:    c.Duration,
 		AdminID:     c.AdminID,
 		Admin:       Admin(c.Admin),
 	}
