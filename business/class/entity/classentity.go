@@ -8,6 +8,10 @@ type Class struct {
 	Clock       string
 	Description string
 	ClassType   string
+	Capacity    int
+	Status      string
+	UserBooked  int
+	Duration    int
 	AdminID     int
 	Admin       Admin
 }

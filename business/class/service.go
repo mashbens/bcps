@@ -19,6 +19,9 @@ type ClassRepo interface {
 	InsertClass(class entity.Class) (entity.Class, error)
 	UpdateClass(class entity.Class) (entity.Class, error)
 	DeleteClass(classID string) error
+
+	UpdateClassStatus(classID string, status string) error
+	UpdateUserBooked(classID string, userBooked int) error
 }
 
 type ClassService interface {
@@ -32,6 +35,9 @@ type ClassService interface {
 	InsertClass(class entity.Class) (*entity.Class, error)
 	UpdateClass(class entity.Class) (*entity.Class, error)
 	DeleteClass(adminId string, classID string) error
+
+	UpdateClassStatus(classID string, status string) error
+	UpdateUserBooked(classID string) error
 }
 
 type clasService struct {
@@ -55,6 +61,8 @@ func (c *clasService) InsertClass(class entity.Class) (*entity.Class, error) {
 		return nil, err
 	}
 	_ = admin
+
+	class.Status = "Available"
 	clas, err := c.classRepo.InsertClass(class)
 	if err != nil {
 		return nil, err
@@ -125,4 +133,23 @@ func (c *clasService) FindClassOffByID(classID string) (*entity.Class, error) {
 	}
 
 	return &class, nil
+}
+
+func (c *clasService) UpdateClassStatus(classID string, status string) error {
+	class := c.classRepo.UpdateClassStatus(classID, status)
+
+	_ = class
+
+	return nil
+}
+func (c *clasService) UpdateUserBooked(classID string) error {
+	findcls, err := c.FindClassByID(classID)
+	if err != nil {
+		return nil
+	}
+
+	findcls.UserBooked = findcls.UserBooked + 1
+	class := c.classRepo.UpdateUserBooked(classID, findcls.UserBooked)
+	_ = class
+	return nil
 }
