@@ -4,6 +4,7 @@ import (
 	"github.com/mashbens/cps/api"
 	"github.com/mashbens/cps/api/v1/admin"
 	"github.com/mashbens/cps/api/v1/auth"
+	"github.com/mashbens/cps/api/v1/booking"
 	"github.com/mashbens/cps/api/v1/class"
 	"github.com/mashbens/cps/api/v1/member"
 	"github.com/mashbens/cps/api/v1/payment"
@@ -33,6 +34,9 @@ import (
 
 	classService "github.com/mashbens/cps/business/class"
 	classRepo "github.com/mashbens/cps/repository/class"
+
+	bookingService "github.com/mashbens/cps/business/booking"
+	bookingRepo "github.com/mashbens/cps/repository/booking"
 )
 
 func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) api.Controller {
@@ -57,6 +61,9 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 	classRepo := classRepo.ClassRepoFactory(dbCon)
 	classService := classService.NewClassService(classRepo, adminService)
 
+	bookingRepo := bookingRepo.BookingRepoFactory(dbCon)
+	bookingService := bookingService.NewBookingService(bookingRepo, userService, classService)
+
 	controller := api.Controller{
 		UserAuth:   auth.NewAuthController(authService, userService),
 		User:       user.NewUserController(userService, jwtService),
@@ -65,6 +72,7 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 		Member:     member.NewMemberController(memberService, jwtService),
 		Admin:      admin.NewAdminController(adminService, jwtService),
 		Class:      class.NewClassController(classService, jwtService),
+		Booking:    booking.NewBookingController(bookingService, jwtService),
 	}
 	return controller
 }
