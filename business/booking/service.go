@@ -11,13 +11,13 @@ import (
 
 type BookingRepo interface {
 	InsertBooking(booking entity.Booking) (entity.Booking, error)
-	// GetSchedule(userID string) (entity.Booking, error)
+	GetSchedule(userID int) (entity.Booking, error)
 	// FindBookingByID(bookingID int) (entity.Booking, error)
 }
 
 type BookingService interface {
 	InsertBooking(booking entity.Booking) (*entity.Booking, error)
-	// GetSchedule(userID string) (*entity.Booking, error)
+	GetSchedule(userID int) (*entity.Booking, error)
 	// FindBookingByID(bookingID int) (*entity.Booking, error)
 }
 
@@ -47,29 +47,6 @@ func (c *bookingService) InsertBooking(booking entity.Booking) (*entity.Booking,
 	}
 	_ = user
 
-	// find class
-
-	// class, err := c.classService.FindClassByID(strconv.Itoa(booking.ClassID))
-	// if err != nil {
-	// 	return nil, errors.New("Class not found")
-	// }
-	// _ = class
-
-	// ++ user booked
-	// upt := c.classService.UpdateUserBooked(strconv.Itoa(booking.ClassID))
-	// _ = upt
-	// log.Println(upt)
-
-	// book, err := c.bookingRepo.InsertBooking(booking)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// book.User = UserToBoo(*user)
-	// book.Class = ClassToBoo(*class)
-
-	// var tempBooking entity.Booking
-
 	class, err := c.classService.FindClassByID(strconv.Itoa(booking.ClassID))
 	if err != nil {
 		return nil, errors.New("Class not found")
@@ -87,9 +64,8 @@ func (c *bookingService) InsertBooking(booking entity.Booking) (*entity.Booking,
 
 	booking.Class.Status = tempStatus.Class.Status
 
-	// update class status
 	err = c.classService.UpdateClassStatus(strconv.Itoa(class.ID), booking.Class.Status)
-	// ++ user booked
+
 	upt := c.classService.UpdateUserBooked(strconv.Itoa(booking.ClassID))
 	_ = upt
 
@@ -106,11 +82,24 @@ func (c *bookingService) InsertBooking(booking entity.Booking) (*entity.Booking,
 
 }
 
-// func (c *bookingService) FindBookingByID(bookingID int) (*entity.Booking, error) {
-// 	booking, err := c.bookingRepo.FindBookingByID(bookingID)
-// 	if err != nil {
-// 		return nil, err
-// 	}
+func (c *bookingService) GetSchedule(userID int) (*entity.Booking, error) {
+	booking, err := c.bookingRepo.GetSchedule(userID)
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &booking, nil
-// }
+	user, err := c.userService.FindUserByID(strconv.Itoa(booking.UserID))
+	if err != nil {
+		return nil, err
+	}
+
+	class, err := c.classService.FindClassByID(strconv.Itoa(booking.ClassID))
+	if err != nil {
+		return nil, err
+	}
+
+	booking.User = UserToBoo(*user)
+	booking.Class = ClassToBoo(*class)
+
+	return &booking, nil
+}
