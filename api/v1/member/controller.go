@@ -49,11 +49,11 @@ func (controller *MemberController) CreateMember(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -111,11 +111,11 @@ func (controller *MemberController) UpdateMemberType(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	paramId := c.Param("id")
 	intID, err := strconv.Atoi(paramId)
@@ -140,11 +140,11 @@ func (controller *MemberController) DeleteMemberType(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	claims := token.Claims.(jwt.MapClaims)
 	adminID := fmt.Sprintf("%v", claims["user_id"])

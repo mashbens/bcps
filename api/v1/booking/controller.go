@@ -36,11 +36,11 @@ func (controller *BookingController) CreateBooking(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	claims := token.Claims.(jwt.MapClaims)
 	if err := c.Bind(&createBookingReq); err != nil {
@@ -57,12 +57,40 @@ func (controller *BookingController) CreateBooking(c echo.Context) error {
 
 	createBookingReq.UserID = intID
 	log.Println(createBookingReq.ClassID, "<-----")
-	Bookingt, err := controller.bookingService.InsertBooking(request.NewCreateBookingReq(createBookingReq))
+	Booking, err := controller.bookingService.InsertBooking(request.NewCreateBookingReq(createBookingReq))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
-	data := resp.FromService(*Bookingt)
+	data := resp.FromService(*Booking)
+	response := _response.BuildSuccsessResponse("User Booke Succsessfully", true, data)
+	return c.JSON(http.StatusOK, response)
+}
+
+func (controller *BookingController) GetSchedule(c echo.Context) error {
+	header := c.Request().Header.Get("Authorization")
+	token := controller.jwtService.ValidateToken(header, c)
+	if header == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
+		return c.JSON(http.StatusUnauthorized, response)
+	}
+	if token == nil {
+		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
+		return c.JSON(http.StatusUnauthorized, response)
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	id := fmt.Sprintf("%v", claims["user_id"])
+	intID, err := strconv.Atoi(id)
+	if err != nil {
+		return nil
+	}
+
+	schedule, err := controller.bookingService.GetSchedule(intID)
+	if err != nil {
+		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
+	data := resp.FromService(*schedule)
 	response := _response.BuildSuccsessResponse("User Booke Succsessfully", true, data)
 	return c.JSON(http.StatusOK, response)
 }

@@ -71,6 +71,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminClass.PUT("/:id", controller.Class.UpdateClass)
 	adminClass.DELETE("/:id", controller.Class.DeleteClass)
 
-	bookingClass := e.Group("/api/v1/class")
+	bookingClass := e.Group("/api/v1/member")
 	bookingClass.POST("/booking", controller.Booking.CreateBooking)
+	bookingClass.GET("/schedule", controller.Booking.GetSchedule)
 }

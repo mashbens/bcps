@@ -125,11 +125,11 @@ func (controller *ClassController) CreateClass(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
@@ -159,11 +159,11 @@ func (controller *ClassController) UpdateClass(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	paramId := c.Param("id")
 	intID, err := strconv.Atoi(paramId)
@@ -191,11 +191,11 @@ func (controller *ClassController) DeleteClass(c echo.Context) error {
 	token := controller.jwtService.ValidateToken(header, c)
 	if header == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	if token == nil {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
-		return c.JSON(http.StatusBadRequest, response)
+		return c.JSON(http.StatusUnauthorized, response)
 	}
 	claims := token.Claims.(jwt.MapClaims)
 	adminID := fmt.Sprintf("%v", claims["user_id"])
