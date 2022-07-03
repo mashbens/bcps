@@ -8,10 +8,11 @@ type Membership struct {
 	ID            int    `gorm:"primary_key:auto_increment" json:"-"`
 	Type          string `gorm:"type:varchar(100)" `
 	Price         int
-	Super_adminID int
-	Super_admin   entity.SuperAdmin `gorm:"foreignkey:Super_adminID" json:"-"`
 	Duration      int
+	Super_adminID int
 	Description   string `gorm:"type:varchar(100)" json:"-"`
+	Img           string
+	Super_admin   entity.SuperAdmin `gorm:"foreignkey:Super_adminID" json:"-"`
 }
 
 func (m *Membership) toService() entity.Membership {
@@ -23,6 +24,7 @@ func (m *Membership) toService() entity.Membership {
 		Super_adminID: m.Super_adminID,
 		Super_admin:   m.Super_admin,
 		Description:   m.Description,
+		Img:           m.Img,
 	}
 }
 
@@ -34,6 +36,7 @@ func fromService(member entity.Membership) Membership {
 		Duration:      member.Duration,
 		Super_adminID: member.Super_adminID,
 		Super_admin:   member.Super_admin,
+		Img:           member.Img,
 		Description:   member.Description,
 	}
 }

@@ -15,6 +15,7 @@ type Class struct {
 	Capacity    int
 	UserBooked  int
 	Duration    int
+	Img         string
 	Status      string `gorm:"type:varchar(100)" `
 	AdminID     int
 	Admin       Admin `gorm:"ForeignKey:AdminID"`
@@ -41,6 +42,7 @@ func (c *Class) toService() entity.Class {
 		Capacity:    c.Capacity,
 		UserBooked:  c.UserBooked,
 		Duration:    c.Duration,
+		Img:         c.Img,
 		AdminID:     c.AdminID,
 		Admin:       entity.Admin(c.Admin),
 	}
@@ -59,6 +61,7 @@ func fromService(c entity.Class) Class {
 		Capacity:    c.Capacity,
 		UserBooked:  c.UserBooked,
 		Duration:    c.Duration,
+		Img:         c.Img,
 		AdminID:     c.AdminID,
 		Admin:       Admin(c.Admin),
 	}
