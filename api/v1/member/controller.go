@@ -7,13 +7,12 @@ import (
 	"strconv"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/labstack/echo/v4"
 	_response "github.com/mashbens/cps/api/common/response"
 	"github.com/mashbens/cps/api/v1/member/request"
 	"github.com/mashbens/cps/api/v1/member/resp"
 	service "github.com/mashbens/cps/business/member"
 	jwtService "github.com/mashbens/cps/business/user"
-
-	"github.com/labstack/echo/v4"
 )
 
 type MemberController struct {
@@ -37,7 +36,7 @@ func (controller *MemberController) CreateMember(c echo.Context) error {
 	header := c.Request().Header.Get("Authorization")
 	err := c.Bind(&newMember)
 	if err != nil {
-		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		response := _response.BuildErrorResponse("Failed to process request asd", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
 
@@ -55,6 +54,12 @@ func (controller *MemberController) CreateMember(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
 		return c.JSON(http.StatusUnauthorized, response)
 	}
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+	newMember.ImgBB = file
 
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
@@ -120,6 +125,12 @@ func (controller *MemberController) UpdateMemberType(c echo.Context) error {
 	paramId := c.Param("id")
 	intID, err := strconv.Atoi(paramId)
 	newMember.ID = intID
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+	newMember.ImgBB = file
 
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])

@@ -10,6 +10,7 @@ type MemberResp struct {
 	Price       int    `json:"price"`
 	Duration    int    `json:"duration"`
 	Description string `json:"description"`
+	Img         string `json:"img"`
 }
 
 func FromService(member member.Membership) MemberResp {
@@ -19,6 +20,7 @@ func FromService(member member.Membership) MemberResp {
 		Price:       member.Price,
 		Duration:    member.Duration,
 		Description: member.Description,
+		Img:         member.Img,
 	}
 }
 

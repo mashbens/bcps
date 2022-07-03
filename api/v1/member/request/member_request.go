@@ -1,14 +1,20 @@
 package request
 
-import "github.com/mashbens/cps/business/member/entity"
+import (
+	"mime/multipart"
+
+	"github.com/mashbens/cps/business/member/entity"
+)
 
 type CreatMemberRequest struct {
-	ID            int    `json:"ID"`
-	Type          string `json:"type"`
-	Price         int    `json:"price"`
-	Duration      int    `json:"duration"`
-	Super_adminID int    `json:"super_admin"`
-	Description   string `json:"description"`
+	ID            int    `form:"ID" json:"ID"`
+	Type          string `form:"type" json:"type"`
+	Price         int    `form:"price" json:"price"`
+	Duration      int    `form:"duration" json:"duration"`
+	Super_adminID int    `form:"super_admin" json:"super_admin"`
+	Description   string `form:"description" json:"description"`
+	Image         string `form:"image"`
+	ImgBB         *multipart.FileHeader
 }
 
 func NewCreateMemberReq(req CreatMemberRequest) entity.Membership {
@@ -19,5 +25,7 @@ func NewCreateMemberReq(req CreatMemberRequest) entity.Membership {
 		Duration:      req.Duration,
 		Super_adminID: req.Super_adminID,
 		Description:   req.Description,
+		Img:           req.Image,
+		ImgBB:         req.ImgBB,
 	}
 }
