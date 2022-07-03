@@ -1,5 +1,7 @@
 package entity
 
+import "mime/multipart"
+
 type Class struct {
 	ID          int
 	Classname   string
@@ -14,6 +16,8 @@ type Class struct {
 	Duration    int
 	AdminID     int
 	Admin       Admin
+	Img         string
+	ImgBB       *multipart.FileHeader
 }
 
 type Admin struct {
