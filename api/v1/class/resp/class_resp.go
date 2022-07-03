@@ -16,6 +16,7 @@ type ClassResp struct {
 	Duration    int    `json:"duration"`
 	UserBooked  int    `json:"user_booked"`
 	Description string `json:"description"`
+	Image       string `json:"image"`
 }
 
 func FromService(class entity.Class) ClassResp {
@@ -31,6 +32,7 @@ func FromService(class entity.Class) ClassResp {
 		Duration:    class.Duration,
 		Description: class.Description,
 		UserBooked:  int(class.UserBooked),
+		Image:       class.Img,
 	}
 }
 

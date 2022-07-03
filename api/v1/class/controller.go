@@ -131,6 +131,12 @@ func (controller *ClassController) CreateClass(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Failed to validate token", nil)
 		return c.JSON(http.StatusUnauthorized, response)
 	}
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+	newClass.ImgBB = file
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
 	adminintID, err := strconv.Atoi(id)
@@ -168,6 +174,12 @@ func (controller *ClassController) UpdateClass(c echo.Context) error {
 	paramId := c.Param("id")
 	intID, err := strconv.Atoi(paramId)
 	newClass.ID = intID
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
+	newClass.ImgBB = file
 
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
