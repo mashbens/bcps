@@ -65,7 +65,7 @@ func (controller *AdminController) RegisteAdmin(c echo.Context) error {
 	admin, err := controller.adminService.InsertAdmin(request.NewAdminReq(newAdmin))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromServiceAdmin(*admin)
 	_response := _response.BuildSuccsessResponse("Admin created successfully", true, data)
@@ -79,10 +79,15 @@ func (controller *AdminController) LoginAdmin(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
+	if newAdmin.Email == "" || newAdmin.Password == "" || newAdmin.Name == "" || newAdmin.Phone == "" {
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
 	admin, err := controller.adminService.AdminLogin(request.NewAdminReq(newAdmin))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromServiceAdmin(*admin)
 	_response := _response.BuildSuccsessResponse("Admin login successfully", true, data)
@@ -107,7 +112,7 @@ func (controller *AdminController) FindAdminByID(c echo.Context) error {
 	admin, err := controller.adminService.FindAdminBySA(sAdminID, adminID)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromServiceAdmin(*admin)
 	_response := _response.BuildSuccsessResponse("Admin found", true, data)
@@ -170,7 +175,7 @@ func (controller *AdminController) UpdateAdmin(c echo.Context) error {
 	admin, err := controller.adminService.UpdateAdmin(request.NewAdminReq(newAdmin))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromServiceAdmin(*admin)
 	_response := _response.BuildSuccsessResponse("Admin Updated successfully", true, data)

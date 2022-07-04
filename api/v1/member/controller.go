@@ -68,7 +68,7 @@ func (controller *MemberController) CreateMember(c echo.Context) error {
 	member, err := controller.memberService.CreateMemberships(request.NewCreateMemberReq(newMember))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*member)
 	_response := _response.BuildSuccsessResponse("User created successfully", true, data)
@@ -91,7 +91,7 @@ func (controller *MemberController) FindMemberByID(c echo.Context) error {
 	member, err := controller.memberService.FindMemberTypeByID(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromService(*member)
@@ -139,7 +139,7 @@ func (controller *MemberController) UpdateMemberType(c echo.Context) error {
 	member, err := controller.memberService.UpdateMemberType(request.NewCreateMemberReq(newMember))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*member)
 	_response := _response.BuildSuccsessResponse("Member found", true, data)

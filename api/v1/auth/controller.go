@@ -45,7 +45,7 @@ func (controller *AuthController) RegisterHandler(c echo.Context) error {
 	user, err := controller.authService.Register(request.NewRegisterRequest(newUser))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromService(*user)
@@ -70,7 +70,7 @@ func (controller *AuthController) LoginHandler(c echo.Context) error {
 	user, err := controller.authService.Login(request.NewLoginRequest(loginRequest))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromService(*user)
@@ -89,7 +89,7 @@ func (controller *AuthController) FindUserByEmailHandler(c echo.Context) error {
 	user, err := controller.userService.FindUserByEmail(FindByEmail.Email)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromService(*user)
@@ -107,7 +107,7 @@ func (controller *AuthController) EmailVerificationHandler(c echo.Context) error
 	user, err := controller.authService.SendEmailVerification(request.NewEmailVerificationRequest(emailVerificationRequest))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromService(*user)
@@ -125,7 +125,7 @@ func (controller *AuthController) ForgotPasswordHandler(c echo.Context) error {
 	user, err := controller.authService.ResetPassword(request.NewPasswordResetRequest(forgotPasswordRequest))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	data := resp.FromService(*user)

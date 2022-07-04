@@ -37,7 +37,7 @@ func (controller *SuperAdminController) RegisterSuperAdmin(c echo.Context) error
 	superAdmin, err := controller.superAdmin.CreateSuperAdmin(request.NewSuperAdminReq(newSuperAdmin))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromServiceSuperAdmin(*superAdmin)
 	_response := _response.BuildSuccsessResponse("Super Admin created successfully", true, data)
@@ -51,6 +51,7 @@ func (controller *SuperAdminController) LoginSuperAdmin(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
+
 	if newSuperAdmin.Password == "" || newSuperAdmin.Name == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
@@ -58,7 +59,7 @@ func (controller *SuperAdminController) LoginSuperAdmin(c echo.Context) error {
 	superAdmin, err := controller.superAdmin.Login(request.NewSuperAdminReq(newSuperAdmin))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromServiceSuperAdmin(*superAdmin)
 	_response := _response.BuildSuccsessResponse("User created successfully", true, data)

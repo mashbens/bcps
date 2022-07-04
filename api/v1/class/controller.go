@@ -46,7 +46,7 @@ func (controller *ClassController) GetClassByID(c echo.Context) error {
 	class, err := controller.classService.FindClassByID(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*class)
 	_response := _response.BuildSuccsessResponse("Member found", true, data)
@@ -81,7 +81,7 @@ func (controller *ClassController) GetClassOnlineByID(c echo.Context) error {
 	class, err := controller.classService.FindClassOnByID(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*class)
 	_response := _response.BuildSuccsessResponse("Member found", true, data)
@@ -96,7 +96,7 @@ func (controller *ClassController) GetClassOfflineByID(c echo.Context) error {
 	class, err := controller.classService.FindClassOffByID(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*class)
 	_response := _response.BuildSuccsessResponse("Member found", true, data)
@@ -145,7 +145,7 @@ func (controller *ClassController) CreateClass(c echo.Context) error {
 	class, err := controller.classService.InsertClass(request.NewCreateClassReq(newClass))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*class)
 	_response := _response.BuildSuccsessResponse("Class created successfully", true, data)
@@ -189,7 +189,7 @@ func (controller *ClassController) UpdateClass(c echo.Context) error {
 	class, err := controller.classService.UpdateClass(request.NewCreateClassReq(newClass))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*class)
 	_response := _response.BuildSuccsessResponse("Member found", true, data)

@@ -45,14 +45,14 @@ func (controller *PaymentController) CreatePayment(c echo.Context) error {
 	claims := token.Claims.(jwt.MapClaims)
 	if err := c.Bind(&createPaymenReq); err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	id := fmt.Sprintf("%v", claims["user_id"])
 	intID, err := strconv.Atoi(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 
 	createPaymenReq.UserID = intID
@@ -60,7 +60,7 @@ func (controller *PaymentController) CreatePayment(c echo.Context) error {
 	payment, err := controller.paymentService.CreatePayment(request.NewCreatePaymentReq(createPaymenReq))
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
-		return c.JSON(http.StatusInternalServerError, response)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	data := resp.FromService(*payment)
 	response := _response.BuildSuccsessResponse("Payment Created", true, data)
