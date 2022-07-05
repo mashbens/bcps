@@ -45,7 +45,7 @@ func (c *MemberPostgresRepository) FindAllMemberType(title string) (data []entit
 
 func (c *MemberPostgresRepository) UpdateMemberType(member entity.Membership) (entity.Membership, error) {
 	record := fromService(member)
-	res := c.db.Model(&record).Updates(map[string]interface{}{"type": member.Type, "price": member.Price, "duration": member.Duration, "description": member.Description})
+	res := c.db.Model(&record).Updates(map[string]interface{}{"type": member.Type, "price": member.Price, "duration": member.Duration, "description": member.Description, "img": member.Img})
 	if res.Error != nil {
 		return record.toService(), res.Error
 	}

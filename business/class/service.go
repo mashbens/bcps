@@ -106,9 +106,13 @@ func (c *clasService) DeleteClass(adminID string, classID string) error {
 		return nil
 	}
 	_ = admin
-	cls := c.classRepo.DeleteClass(classID)
+	class, err := c.FindClassByID(classID)
+	if err != nil {
+		return errors.New("Class not found")
+	}
+	cls := c.classRepo.DeleteClass(strconv.Itoa(class.ID))
 	_ = cls
-	return nil
+	return err
 }
 
 func (c *clasService) FindClassByID(classID string) (*entity.Class, error) {

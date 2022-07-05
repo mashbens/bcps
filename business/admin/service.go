@@ -187,11 +187,15 @@ func (c *adminService) DeleteAdmin(sAdminID string, adminID string) error {
 	}
 	_ = sAdmin
 
-	m := c.adminRepo.DeleteAdmin(adminID)
+	admin, err := c.FindAdminByID(adminID)
 	if err != nil {
-		return nil
+		return errors.New("Admin not found")
+	}
+	m := c.adminRepo.DeleteAdmin(strconv.Itoa(admin.ID))
+	if err != nil {
+		return errors.New("Admin not found")
 	}
 	_ = m
 
-	return nil
+	return err
 }
