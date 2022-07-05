@@ -80,7 +80,7 @@ func (controller *AdminController) LoginAdmin(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, response)
 	}
 
-	if newAdmin.Email == "" || newAdmin.Password == "" || newAdmin.Name == "" || newAdmin.Phone == "" {
+	if newAdmin.Email == "" || newAdmin.Password == "" {
 		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
@@ -197,7 +197,10 @@ func (controller *AdminController) DeleteAdmin(c echo.Context) error {
 	adminID := c.Param("id")
 
 	member := controller.adminService.DeleteAdmin(sAdminID, adminID)
-	_ = member
+	if member != nil {
+		response := _response.BuildErrorResponse("Failed to process request", "Admin not found", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
 
 	_response := _response.BuildSuccsessResponse("Admin Deleted", true, nil)
 	return c.JSON(http.StatusOK, _response)

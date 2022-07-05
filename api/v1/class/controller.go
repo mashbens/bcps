@@ -134,7 +134,8 @@ func (controller *ClassController) CreateClass(c echo.Context) error {
 
 	file, err := c.FormFile("image")
 	if err != nil {
-		return err
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	newClass.ImgBB = file
 	claims := token.Claims.(jwt.MapClaims)
@@ -177,7 +178,8 @@ func (controller *ClassController) UpdateClass(c echo.Context) error {
 
 	file, err := c.FormFile("image")
 	if err != nil {
-		return err
+		response := _response.BuildErrorResponse("Failed to process request", "Invalid request body", nil)
+		return c.JSON(http.StatusBadRequest, response)
 	}
 	newClass.ImgBB = file
 
@@ -214,7 +216,10 @@ func (controller *ClassController) DeleteClass(c echo.Context) error {
 	memberID := c.Param("id")
 
 	member := controller.classService.DeleteClass(adminID, memberID)
-	_ = member
+	if member != nil {
+		response := _response.BuildErrorResponse("Failed to process request", "Class not found", nil)
+		return c.JSON(http.StatusBadRequest, response)
+	}
 
 	_response := _response.BuildSuccsessResponse("Class Deleted", true, nil)
 	return c.JSON(http.StatusOK, _response)

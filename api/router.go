@@ -6,6 +6,7 @@ import (
 	"github.com/mashbens/cps/api/v1/booking"
 	"github.com/mashbens/cps/api/v1/class"
 	"github.com/mashbens/cps/api/v1/member"
+	"github.com/mashbens/cps/api/v1/newsletter"
 	"github.com/mashbens/cps/api/v1/payment"
 	"github.com/mashbens/cps/api/v1/superadmin"
 	"github.com/mashbens/cps/api/v1/user"
@@ -22,6 +23,7 @@ type Controller struct {
 	Admin      *admin.AdminController
 	Class      *class.ClassController
 	Booking    *booking.BookingController
+	Newsletter *newsletter.NewsController
 }
 
 func RegisterRoutes(e *echo.Echo, controller *Controller) {
@@ -74,4 +76,11 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	bookingClass := e.Group("/api/v1/member")
 	bookingClass.POST("/booking", controller.Booking.CreateBooking)
 	bookingClass.GET("/schedule", controller.Booking.GetSchedule)
+
+	newsRoutes := e.Group("/api/v1/newsletter")
+	newsRoutes.POST("/create-newsletter", controller.Newsletter.CreateNews)
+	newsRoutes.GET("/list", controller.Newsletter.GetAllNews)
+	newsRoutes.GET("/:id", controller.Newsletter.GetNewsByID)
+	newsRoutes.PUT("/:id", controller.Newsletter.UpdateNews)
+	newsRoutes.DELETE("/:id", controller.Newsletter.DeleteNews)
 }
