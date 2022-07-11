@@ -54,10 +54,10 @@ func RegisterModules(dbCon *util.DatabaseConnection, config *config.AppConfig) a
 	superAdminService := superAdminService.NewSuperAdminService(superAdminRepo, jwtService)
 
 	adminRepo := adminRepo.AdminRepositoryFactory(dbCon)
-	adminService := adminService.NewAdminService(adminRepo, jwtService, superAdminService)
+	adminService := adminService.NewAdminService(adminRepo, jwtService)
 
 	memberRepo := memberRepo.MemberRepoFactory(dbCon)
-	memberService := memberService.NewMemberService(memberRepo, superAdminService)
+	memberService := memberService.NewMemberService(memberRepo)
 
 	paymentRepo := paymentRepo.PaymentRepositoryFactory(dbCon)
 	paymentService := paymentService.NewPaymentService(paymentRepo, memberService, userService)
