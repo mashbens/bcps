@@ -14,7 +14,8 @@ import (
 	imgBB "github.com/JohnNON/ImgBB"
 
 	"github.com/mashbens/cps/business/member/entity"
-	"github.com/mashbens/cps/business/superadmin"
+	"github.com/mashbens/cps/config"
+	// "github.com/mashbens/cps/business/superadmin"
 )
 
 type MemberRepo interface {
@@ -36,17 +37,17 @@ type MemberService interface {
 }
 
 type memberService struct {
-	memberRepo       MemberRepo
-	superAdminSevice superadmin.SuperAdminService
+	memberRepo MemberRepo
+	// superAdminSevice superadmin.SuperAdminService
 }
 
 func NewMemberService(
 	MemberRepo MemberRepo,
-	superAdminSevice superadmin.SuperAdminService,
+	// superAdminSevice superadmin.SuperAdminService,
 ) MemberService {
 	return &memberService{
-		memberRepo:       MemberRepo,
-		superAdminSevice: superAdminSevice,
+		memberRepo: MemberRepo,
+		// superAdminSevice: superAdminSevice,
 	}
 }
 
@@ -67,12 +68,6 @@ func (c *memberService) FindMemberTypeByID(memberID string) (*entity.Membership,
 }
 
 func (c *memberService) CreateMemberships(member entity.Membership) (*entity.Membership, error) {
-	strID := strconv.Itoa(member.Super_adminID)
-	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(strID)
-	if err != nil {
-		return nil, err
-	}
-	_ = sAdmin
 
 	img := c.ImgUpload(member.ImgBB)
 
@@ -87,12 +82,6 @@ func (c *memberService) CreateMemberships(member entity.Membership) (*entity.Mem
 }
 
 func (c *memberService) UpdateMemberType(member entity.Membership) (*entity.Membership, error) {
-
-	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(strconv.Itoa(member.Super_adminID))
-	if err != nil {
-		return nil, errors.New("Super admin not found")
-	}
-	_ = sAdmin
 
 	m, err := c.FindMemberTypeByID(strconv.Itoa(member.ID))
 	if err != nil {
@@ -113,14 +102,9 @@ func (c *memberService) UpdateMemberType(member entity.Membership) (*entity.Memb
 }
 
 func (c *memberService) DeleteMemberType(adminID string, memberID string) error {
-	sAdmin, err := c.superAdminSevice.FindSuperAdminByID(adminID)
-	if err != nil {
-		return nil
-	}
-	_ = sAdmin
 
 	m := c.memberRepo.DeleteMemberType(memberID)
-	if err != nil {
+	if m != nil {
 		return nil
 	}
 	log.Println(memberID)
@@ -140,7 +124,9 @@ func (c *memberService) ImgUpload(file *multipart.FileHeader) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	key := "02406488a81ff26d2a22b6306b6b21f9"
+
+	config := config.GetConfig()
+	key := config.Imgbb.Key
 	img := imgBB.NewImage(hashSum(b), "60", b)
 
 	bb := imgBB.NewImgBB(key, 5*time.Second)
