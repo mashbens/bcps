@@ -20,3 +20,6 @@ privatekey = ""
 [midtrans]
 clientKey = ""
 ServerKey = ""
+
+[imgbb]
+key = ""

@@ -29,6 +29,9 @@ type AppConfig struct {
 		ClientKey string `toml:"clientKey"`
 		ServerKey string `toml:"serverKey"`
 	} `toml:"midtrans"`
+	Imgbb struct {
+		Key string `toml:"key"`
+	} `toml:"imgbb"`
 }
 
 var lock = &sync.Mutex{}
