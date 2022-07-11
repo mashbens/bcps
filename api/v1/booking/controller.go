@@ -80,12 +80,8 @@ func (controller *BookingController) GetSchedule(c echo.Context) error {
 	}
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
-	intID, err := strconv.Atoi(id)
-	if err != nil {
-		return nil
-	}
 
-	schedule, err := controller.bookingService.GetSchedule(intID)
+	schedule, err := controller.bookingService.GetSchedule(id)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusBadRequest, response)
