@@ -11,13 +11,13 @@ import (
 
 type BookingRepo interface {
 	InsertBooking(booking entity.Booking) (entity.Booking, error)
-	GetSchedule(userID int) (entity.Booking, error)
+	GetSchedule(userID string) (entity.Booking, error)
 	// FindBookingByID(bookingID int) (entity.Booking, error)
 }
 
 type BookingService interface {
 	InsertBooking(booking entity.Booking) (*entity.Booking, error)
-	GetSchedule(userID int) (*entity.Booking, error)
+	GetSchedule(userID string) (*entity.Booking, error)
 	// FindBookingByID(bookingID int) (*entity.Booking, error)
 }
 
@@ -82,7 +82,7 @@ func (c *bookingService) InsertBooking(booking entity.Booking) (*entity.Booking,
 
 }
 
-func (c *bookingService) GetSchedule(userID int) (*entity.Booking, error) {
+func (c *bookingService) GetSchedule(userID string) (*entity.Booking, error) {
 	booking, err := c.bookingRepo.GetSchedule(userID)
 	if err != nil {
 		return nil, err
