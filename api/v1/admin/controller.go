@@ -106,10 +106,10 @@ func (controller *AdminController) FindAdminByID(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, response)
 	}
 	claims := token.Claims.(jwt.MapClaims)
-	sAdminID := fmt.Sprintf("%v", claims["user_id"])
+	_ = fmt.Sprintf("%v", claims["user_id"])
 	adminID := c.Param("id")
 
-	admin, err := controller.adminService.FindAdminBySA(sAdminID, adminID)
+	admin, err := controller.adminService.FindAdminByID(adminID)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusBadRequest, response)
