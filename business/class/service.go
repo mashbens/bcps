@@ -15,6 +15,7 @@ import (
 
 	"github.com/mashbens/cps/business/admin"
 	"github.com/mashbens/cps/business/class/entity"
+	"github.com/mashbens/cps/config"
 )
 
 type ClassRepo interface {
@@ -185,7 +186,8 @@ func (c *clasService) ImgUpload(file *multipart.FileHeader) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	key := "02406488a81ff26d2a22b6306b6b21f9"
+	config := config.GetConfig()
+	key := config.Imgbb.Key
 	img := imgBB.NewImage(hashSum(b), "60", b)
 
 	bb := imgBB.NewImgBB(key, 5*time.Second)
