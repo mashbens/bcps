@@ -25,7 +25,7 @@ func (c *BookingPostgresRepo) InsertBooking(booking entity.Booking) (entity.Book
 	return record.toService(), nil
 }
 
-func (c *BookingPostgresRepo) GetSchedule(userID int) (entity.Booking, error) {
+func (c *BookingPostgresRepo) GetSchedule(userID string) (entity.Booking, error) {
 	var record Booking
 	res := c.db.Where("id = ?", userID).Take(&record)
 	if res.Error != nil {
