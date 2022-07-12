@@ -62,7 +62,7 @@ func (c *userService) ResetPassword(user entity.User) (*entity.User, error) {
 
 	u, err := c.userRepo.ResetPassword(user)
 	if err != nil {
-		return nil, errors.New("user not found")
+		return nil, err
 	}
 
 	return &u, nil
@@ -81,8 +81,6 @@ func (c *userService) UpdateUser(user entity.User) (*entity.User, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// logic update changes to service
 
 	return &user, nil
 }
