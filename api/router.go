@@ -67,6 +67,7 @@ func RegisterRoutes(e *echo.Echo, controller *Controller) {
 	adminClass.GET("/:id", controller.Class.GetClassByID)
 	adminClass.GET("/online/list", controller.Class.GetAllClasOnline)
 	adminClass.GET("/offline/list", controller.Class.GetAllClasOffline)
+	adminClass.GET("", controller.Class.SearchClass)
 
 	adminClass.GET("/online/:id", controller.Class.GetClassOnlineByID)
 	adminClass.GET("/offline/:id", controller.Class.GetClassOfflineByID)

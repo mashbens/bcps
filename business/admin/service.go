@@ -2,6 +2,7 @@ package admin
 
 import (
 	// "errors"
+	"errors"
 	"log"
 	"strconv"
 
@@ -49,7 +50,7 @@ func NewAdminService(
 func (c *adminService) InsertAdmin(admin entity.Admin) (*entity.Admin, error) {
 	adm, err := c.adminRepo.FindAdminByEmail(admin.Email)
 	if err == nil {
-		return nil, err
+		return nil, errors.New("admin already exists")
 	}
 	admin.Password = hashAndSalt([]byte(admin.Password))
 	adm, err = c.adminRepo.InsertAdmin(admin)
@@ -62,7 +63,7 @@ func (c *adminService) InsertAdmin(admin entity.Admin) (*entity.Admin, error) {
 func (c *adminService) AdminLogin(admin entity.Admin) (*entity.Admin, error) {
 	err := c.VerifyCredential(admin.Email, admin.Password)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("Invalid email or password")
 	}
 	adm, _ := c.adminRepo.FindAdminByEmail(admin.Email)
 	token := c.jwtService.GenerateToken(strconv.Itoa(adm.ID))
@@ -78,7 +79,7 @@ func (c *adminService) VerifyCredential(email string, password string) error {
 	}
 	isValidPassword := comparePassword(user.Password, []byte(password))
 	if !isValidPassword {
-		return err
+		return errors.New("failed to login. check your credential")
 	}
 	return nil
 }

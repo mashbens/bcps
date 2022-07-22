@@ -86,7 +86,7 @@ func (controller *BookingController) GetSchedule(c echo.Context) error {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusBadRequest, response)
 	}
-	data := resp.FromService(*schedule)
+	data := resp.FromServiceSlice(*schedule)
 	response := _response.BuildSuccsessResponse("User Booke Succsessfully", true, data)
 	return c.JSON(http.StatusOK, response)
 }

@@ -9,8 +9,13 @@ type Booking struct {
 	UserID int
 	// User    entity.User `gorm:"foreignkey:UserID" json:"-"`
 	ClassID int
-	// Class   entity.Class `gorm:"foreignkey:UserID" json:"-"`
+	// 	Class   Class
 }
+
+// type Class struct {
+// 	ID        int
+// 	Classname string
+// }
 
 func (b *Booking) toService() entity.Booking {
 	return entity.Booking{
@@ -30,4 +35,12 @@ func fromService(b entity.Booking) Booking {
 		ClassID: b.ClassID,
 		// Class:   b.Class,
 	}
+}
+
+func toServiceList(data []Booking) []entity.Booking {
+	a := []entity.Booking{}
+	for key := range data {
+		a = append(a, data[key].toService())
+	}
+	return a
 }

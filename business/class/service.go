@@ -26,6 +26,7 @@ type ClassRepo interface {
 	FindClassOnByID(classID string) (entity.Class, error)
 	FindClassOffByID(classID string) (entity.Class, error)
 
+	FindAllClassBySerach(search string) (data []entity.Class)
 	InsertClass(class entity.Class) (entity.Class, error)
 	UpdateClass(class entity.Class) (entity.Class, error)
 	DeleteClass(classID string) error
@@ -39,6 +40,9 @@ type ClassService interface {
 	FindClassByID(classID string) (*entity.Class, error)
 	FindAllClassOn(search string) (data []entity.Class)
 	FindAllClassOff(search string) (data []entity.Class)
+
+	FindAllClassBySerach(search string) (data []entity.Class)
+
 	FindClassOnByID(classID string) (*entity.Class, error)
 	FindClassOffByID(classID string) (*entity.Class, error)
 
@@ -127,6 +131,11 @@ func (c *clasService) FindClassByID(classID string) (*entity.Class, error) {
 
 func (c *clasService) FindAllClass(search string) (data []entity.Class) {
 	data = c.classRepo.FindAllClass(search)
+	return
+}
+
+func (c *clasService) FindAllClassBySerach(search string) (data []entity.Class) {
+	data = c.classRepo.FindAllClassBySerach(search)
 	return
 }
 

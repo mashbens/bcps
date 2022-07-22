@@ -44,7 +44,9 @@ func (controller *UserController) Profile(c echo.Context) error {
 
 	claims := token.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
-	user, err := controller.userService.FindUserByID(id)
+
+	intID, err := strconv.Atoi(id)
+	user, err := controller.userService.FindUserByID(intID)
 	if err != nil {
 		response := _response.BuildErrorResponse("Failed to process request", err.Error(), nil)
 		return c.JSON(http.StatusBadRequest, response)

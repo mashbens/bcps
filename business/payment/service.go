@@ -67,10 +67,8 @@ func (c *paymentService) CreatePayment(paymentReq entity.Payment) (*entity.Payme
 	userExpiry := time.Now().AddDate(0, duration, 0).Format("2006-01-02")
 
 	// find update user expired
-	strUserID := strconv.Itoa(paymentReq.UserID)
-	userExp := c.userService.UpdateUserExpiry(strUserID, userExpiry, member.Type)
-	_ = userExp
-	user, err := c.userService.FindUserByID(strUserID)
+	_ = c.userService.UpdateUserExpiry(paymentReq.UserID, userExpiry, member.Type)
+	user, err := c.userService.FindUserByID(paymentReq.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -94,8 +92,7 @@ func (c *paymentService) FindPaymentDetails(userID string) (*entity.Payment, err
 	if err != nil {
 		return nil, err
 	}
-	strUserID := strconv.Itoa(payment.UserID)
-	user, err := c.userService.FindUserByID(strUserID)
+	user, err := c.userService.FindUserByID(payment.UserID)
 	if err != nil {
 		return nil, err
 	}

@@ -25,11 +25,13 @@ func (c *BookingPostgresRepo) InsertBooking(booking entity.Booking) (entity.Book
 	return record.toService(), nil
 }
 
-func (c *BookingPostgresRepo) GetSchedule(userID string) (entity.Booking, error) {
-	var record Booking
-	res := c.db.Where("id = ?", userID).Take(&record)
+func (c *BookingPostgresRepo) GetSchedule(userID string) (data []entity.Booking) {
+	var record []Booking
+	// res := c.db.Debug().Joins("Classes").Find(&record)
+	res := c.db.Where("user_id = ?", userID).Find(&record)
 	if res.Error != nil {
-		return record.toService(), res.Error
+		return []entity.Booking{}
 	}
-	return record.toService(), nil
+
+	return toServiceList(record)
 }

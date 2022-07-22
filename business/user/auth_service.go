@@ -61,14 +61,16 @@ func (c *authService) Register(user entity.User) (*entity.User, error) {
 }
 
 func (c *authService) Login(user entity.User) (*entity.User, error) {
-	// verify credential
 
 	err := c.VerifyCredential(user.Email, user.Password)
 	if err != nil {
 		return nil, errors.New("Invalid email or password")
 	}
 
-	usr, _ := c.userService.FindUserByEmail(user.Email)
+	usr, err := c.userService.FindUserByEmail(user.Email)
+	if err != nil {
+		return nil, err
+	}
 
 	token := c.jwtService.GenerateToken((strconv.Itoa(usr.ID)))
 	usr.Token = token
@@ -183,6 +185,7 @@ func (c *authService) SendOTPtoEmail(otp string, name string, email string) erro
 }
 
 func (c *authService) SendEmailVerification(email string) (*entity.User, error) {
+
 	config := config.GetConfig()
 
 	companyEmail := config.Mailjet.Email

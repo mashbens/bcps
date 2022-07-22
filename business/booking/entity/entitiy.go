@@ -1,11 +1,12 @@
 package entity
 
 type Booking struct {
-	ID      int
-	UserID  int
-	User    User
-	ClassID int
-	Class   Class
+	ID         int
+	UserID     int
+	User       User
+	ClassID    int
+	Class      Class
+	ClassSlice []Class
 }
 type User struct {
 	ID             int

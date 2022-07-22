@@ -1,6 +1,8 @@
 package class
 
 import (
+	"log"
+
 	"github.com/mashbens/cps/business/class"
 	"github.com/mashbens/cps/business/class/entity"
 	"gorm.io/gorm"
@@ -59,6 +61,15 @@ func (c *ClassPostgresRepo) FindClassByID(classID string) (entity.Class, error) 
 func (c *ClassPostgresRepo) FindAllClass(classID string) (data []entity.Class) {
 	var record []Class
 	res := c.db.Find(&record)
+	if res.Error != nil {
+		return []entity.Class{}
+	}
+	return toServiceList(record)
+}
+func (c *ClassPostgresRepo) FindAllClassBySerach(search string) (data []entity.Class) {
+	var record []Class
+	log.Println(search)
+	res := c.db.Where("classname = ?", search).Take(&record)
 	if res.Error != nil {
 		return []entity.Class{}
 	}

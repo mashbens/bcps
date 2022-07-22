@@ -30,6 +30,17 @@ func NewClassController(
 	}
 }
 
+// search class
+func (controller *ClassController) SearchClass(c echo.Context) error {
+	search := c.Request().URL.Query().Get("search")
+	res := controller.classService.FindAllClassBySerach(search)
+
+	data := resp.FromServiceSlice(res)
+
+	_response := _response.BuildSuccsessResponse("All Class found", true, data)
+	return c.JSON(http.StatusOK, _response)
+}
+
 // find all class
 func (controller *ClassController) GetAllClass(c echo.Context) error {
 	res := controller.classService.FindAllClass("")

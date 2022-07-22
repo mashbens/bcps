@@ -11,7 +11,7 @@ import (
 
 type BookingRepo interface {
 	InsertBooking(booking entity.Booking) (entity.Booking, error)
-	GetSchedule(userID string) (entity.Booking, error)
+	GetSchedule(userID string) (data []entity.Booking)
 	// FindBookingByID(bookingID int) (entity.Booking, error)
 }
 
@@ -41,7 +41,7 @@ func NewBookingService(
 
 func (c *bookingService) InsertBooking(booking entity.Booking) (*entity.Booking, error) {
 	// find user
-	user, err := c.userService.FindUserByID(strconv.Itoa(booking.UserID))
+	user, err := c.userService.FindUserByID(booking.UserID)
 	if err != nil {
 		return nil, errors.New("User not found")
 	}
@@ -83,23 +83,20 @@ func (c *bookingService) InsertBooking(booking entity.Booking) (*entity.Booking,
 }
 
 func (c *bookingService) GetSchedule(userID string) (*entity.Booking, error) {
-	booking, err := c.bookingRepo.GetSchedule(userID)
-	if err != nil {
-		return nil, err
+	data := c.bookingRepo.GetSchedule(userID)
+	b := entity.Booking{}
+	cls := []entity.Class{}
+	for _, r := range data {
+		class, err := c.classService.FindClassByID(strconv.Itoa(r.ClassID))
+		if err != nil {
+			return nil, err
+		}
+		cls = append(cls, ClassToBoo(*class))
 	}
 
-	user, err := c.userService.FindUserByID(strconv.Itoa(booking.UserID))
-	if err != nil {
-		return nil, err
-	}
+	usrID, _ := strconv.Atoi(userID)
+	b.UserID = usrID
+	b.ClassSlice = cls
 
-	class, err := c.classService.FindClassByID(strconv.Itoa(booking.ClassID))
-	if err != nil {
-		return nil, err
-	}
-
-	booking.User = UserToBoo(*user)
-	booking.Class = ClassToBoo(*class)
-
-	return &booking, nil
+	return &b, nil
 }
